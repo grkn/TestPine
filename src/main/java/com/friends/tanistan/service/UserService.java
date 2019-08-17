@@ -5,8 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.friends.tanistan.controller.resource.ErrorResource;
+import com.friends.tanistan.controller.resource.ErrorResource.ErrorContent;
 import com.friends.tanistan.entity.UserEntity;
+import com.friends.tanistan.exception.NotFoundException;
 import com.friends.tanistan.repository.UserRepository;
+import com.google.common.base.Optional;
 
 @Service
 public class UserService<T extends UserEntity> extends BaseService {
@@ -28,4 +32,13 @@ public class UserService<T extends UserEntity> extends BaseService {
 		return userRepository.findAll(pageable);
 	}
 
+	public UserEntity getUserById(String id) {
+		return userRepository.findById(id).orElseThrow(() ->
+				new NotFoundException(
+						ErrorResource.ErrorContent
+						.builder()
+						.message(String.format("User can not be found be given id : %s", id))
+						.build(""))
+				);
+	}
 }

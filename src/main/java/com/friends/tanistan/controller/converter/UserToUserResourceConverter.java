@@ -10,6 +10,7 @@ public class UserToUserResourceConverter implements Converter<UserEntity, UserRe
 	@Override
 	public UserResource convert(UserEntity source) {
 		UserResource userResource = new UserResource();
+		userResource.setId(source.getId());
 		userResource.setName(source.getName());
 		userResource.setBirthDay(source.getBirthDay());
 		userResource.setEmailAddress(source.getEmailAddress());

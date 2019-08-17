@@ -1,6 +1,5 @@
 package com.friends.tanistan.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -12,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,5 +46,11 @@ public class UserController {
 	public ResponseEntity<Page<UserResource>> getUsers(@PageableDefault Pageable pageable) {
 		Page<UserEntity> result = userService.getUsers(pageable);
 		return ResponseEntity.of(Optional.of(result.map(item -> conversionService.convert(item, UserResource.class))));
+	}
+
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<UserResource> getUserById(@PathVariable String id) {
+		UserEntity result = userService.getUserById(id);
+		return ResponseEntity.of(Optional.of(conversionService.convert(result, UserResource.class)));
 	}
 }

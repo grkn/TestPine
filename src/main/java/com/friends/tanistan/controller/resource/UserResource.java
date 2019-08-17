@@ -3,7 +3,8 @@ package com.friends.tanistan.controller.resource;
 import java.util.Date;
 
 public class UserResource {
-
+	
+	private String id;
 	private String name;
 	private String middleName;
 	private String lastName;
@@ -75,6 +76,14 @@ public class UserResource {
 
 	public void setAccountName(String accountName) {
 		this.accountName = accountName;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }
