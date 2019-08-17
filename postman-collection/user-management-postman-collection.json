@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "e98736f8-f5f8-4e28-b186-b7cc5f82f082",
+		"name": "gurkan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tanistanCreateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cf45e43c-19c3-4368-aea1-5a0df6b91498",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"user_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"name1\",\n\t\"lastName\" : \"lastName1\",\n\t\"birthDay\" : \"31-01-1985\",\n\t\"emailAddress\" : \"gurkan.illeez@gmail.com\",\n\t\"accountPhrase\" : \"password\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/tanistan/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/tanistan/user/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUsers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "51f3282d-7d85-48e2-909f-0f28a4f8a016",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/tanistan/user/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"user",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"name2\",\n\t\"lastName\" : \"lastName2\",\n\t\"birthDay\" : \"31-01-1982\",\n\t\"emailAddress\" : \"gurkan.illeez2@gmail.com\",\n\t\"accountPhrase\" : \"password2\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/tanistan/user/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/tanistan/user/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"user",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

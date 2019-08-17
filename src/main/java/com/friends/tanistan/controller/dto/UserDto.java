@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.friends.tanistan.enums.AttemptType;
 
 public class UserDto {
 
@@ -26,6 +27,8 @@ public class UserDto {
 	@NotBlank
 	private String accountPhrase;
 	private String accountName;
+	private String attemptType;
+	private Integer loginAttempt;
 
 	public String getName() {
 		return name;
@@ -105,6 +108,22 @@ public class UserDto {
 
 	public void setAccountName(String accountName) {
 		this.accountName = accountName;
+	}
+
+	public String getAttemptType() {
+		return attemptType;
+	}
+
+	public void setAttemptType(String attemptType) {
+		this.attemptType = attemptType;
+	}
+
+	public Integer getLoginAttempt() {
+		return loginAttempt;
+	}
+
+	public void setLoginAttempt(Integer loginAttempt) {
+		this.loginAttempt = loginAttempt;
 	}
 
 }

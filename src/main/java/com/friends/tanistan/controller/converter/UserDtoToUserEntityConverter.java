@@ -21,8 +21,13 @@ public class UserDtoToUserEntityConverter implements Converter<UserDto, UserEnti
 		userEntity.setAccountName(source.getAccountName());
 
 		userEntity.setSecretAnswer(source.getSecretAnswer());
-		userEntity.setAttemptType(AttemptType.SUCCESS);
-		userEntity.setLoginAttempt(0);
+		
+		if(source.getAttemptType() != null) {
+			userEntity.setAttemptType(AttemptType.valueOf(source.getAttemptType()));
+		}
+		if(source.getLoginAttempt() != null) {
+			userEntity.setLoginAttempt(source.getLoginAttempt());
+		}
 
 		userEntity.setAccountPhrase(source.getAccountPhrase());
 		return userEntity;

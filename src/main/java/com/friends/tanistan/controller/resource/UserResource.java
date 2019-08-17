@@ -2,12 +2,15 @@ package com.friends.tanistan.controller.resource;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class UserResource {
 	
 	private String id;
 	private String name;
 	private String middleName;
 	private String lastName;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date birthDay;
 	private String emailAddress;
 	private String phoneNumber;

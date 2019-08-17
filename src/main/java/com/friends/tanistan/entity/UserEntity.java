@@ -39,7 +39,7 @@ public class UserEntity extends TanistanBaseEntity<String> {
 	private String accountPhrase;
 	private String accountName;
 
-	private int loginAttempt = 0;
+	private Integer loginAttempt = 0;
 
 	@Enumerated(value = EnumType.STRING)
 	private AttemptType attemptType;
@@ -128,11 +128,11 @@ public class UserEntity extends TanistanBaseEntity<String> {
 		this.accountName = accountName;
 	}
 
-	public int getLoginAttempt() {
+	public Integer getLoginAttempt() {
 		return loginAttempt;
 	}
 
-	public void setLoginAttempt(int loginAttempt) {
+	public void setLoginAttempt(Integer loginAttempt) {
 		this.loginAttempt = loginAttempt;
 	}
 
