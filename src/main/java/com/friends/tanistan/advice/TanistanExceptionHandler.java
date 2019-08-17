@@ -1,8 +1,5 @@
 package com.friends.tanistan.advice;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
