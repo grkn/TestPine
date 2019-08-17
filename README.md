@@ -11,24 +11,35 @@ Libraries Used.
 Java v12
 
 Spring Boot v2.17
+
 Spring Data Jpa with hibernate v2.17
+
 Spring security v2.17
+
 Spring Web Rest Services v2.17
+
 Simple Login html page 
+
 Flyway
+
 Gradle v5.6
 
 You can check the versions in build.gradle file.
 
 // not permenant after we choose a useful rdm we will use it.
+
 // as a nosql db i will use cassandra. and as graphbase is Neo4J
+
 h2 in memory database
 
 Next Time implementations : 
 
 Feign or Ribbon implementation in rest interactions
+
 Redis or Hazelcast for in memory cache or data grid 
+
 Docker,
+
 Scalebility in google cloud
 
 As TDD
