@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.friends.tanistan.controller.resource.ErrorResource;
 import com.friends.tanistan.entity.UserEntity;
-import com.friends.tanistan.enums.AttemptType;
 import com.friends.tanistan.exception.NotFoundException;
 import com.friends.tanistan.repository.UserRepository;
 
@@ -46,6 +45,10 @@ public class UserService<T extends UserEntity> extends BaseService {
 		userRepository.deleteById(id);
 	}
 
+	public UserEntity getUserByUsernameOrEmail(String userName, String email) {
+		return userRepository.findByAccountNameOrEmailAddress(userName, email);
+	}
+
 	private void overrideVariables(UserEntity user, UserEntity userEntity) {
 		userEntity.setName(user.getName());
 		userEntity.setBirthDay(user.getBirthDay());
@@ -54,17 +57,18 @@ public class UserService<T extends UserEntity> extends BaseService {
 		userEntity.setMiddleName(user.getMiddleName());
 		userEntity.setPhoneNumber(user.getPhoneNumber());
 		userEntity.setSecretQuestion(user.getSecretQuestion());
-		userEntity.setAccountName(user.getAccountName());
+		userEntity.setUserAuthorization(user.getUserAuthorization());
 
 		userEntity.setSecretAnswer(user.getSecretAnswer());
-		if(user.getAttemptType() != null) {
+		if (user.getAttemptType() != null) {
 			userEntity.setAttemptType(user.getAttemptType());
 		}
-		if(user.getLoginAttempt() != null) {
+		if (user.getLoginAttempt() != null) {
 			userEntity.setLoginAttempt(user.getLoginAttempt());
 		}
-		if(userEntity.getAccountPhrase() != null) {
+		if (userEntity.getAccountPhrase() != null) {
 			userEntity.setAccountPhrase(passwordEncoder.encode(userEntity.getAccountPhrase()));
 		}
 	}
+
 }

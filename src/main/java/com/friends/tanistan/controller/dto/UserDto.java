@@ -1,13 +1,13 @@
 package com.friends.tanistan.controller.dto;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.friends.tanistan.enums.AttemptType;
 
 public class UserDto {
 
@@ -24,9 +24,10 @@ public class UserDto {
 	private String phoneNumber;
 	private String secretQuestion;
 	private String secretAnswer;
+	private String accountName;
 	@NotBlank
 	private String accountPhrase;
-	private String accountName;
+	private Set<UserAuthorizationDto> userAuthorzation;
 	private String attemptType;
 	private Integer loginAttempt;
 
@@ -102,14 +103,6 @@ public class UserDto {
 		this.accountPhrase = accountPhrase;
 	}
 
-	public String getAccountName() {
-		return accountName;
-	}
-
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
-
 	public String getAttemptType() {
 		return attemptType;
 	}
@@ -124,6 +117,22 @@ public class UserDto {
 
 	public void setLoginAttempt(Integer loginAttempt) {
 		this.loginAttempt = loginAttempt;
+	}
+
+	public Set<UserAuthorizationDto> getUserAuthorzation() {
+		return userAuthorzation;
+	}
+
+	public void setUserAuthorzation(Set<UserAuthorizationDto> userAuthorzation) {
+		this.userAuthorzation = userAuthorzation;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
 	}
 
 }

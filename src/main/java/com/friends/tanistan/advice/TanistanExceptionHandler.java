@@ -25,6 +25,7 @@ public class TanistanExceptionHandler extends ResponseEntityExceptionHandler {
 	// Latest Solution
 	@ExceptionHandler({ Throwable.class })
 	public ResponseEntity<Object> handleExceptionLatest(Exception ex, WebRequest request) {
+		ex.printStackTrace();
 		return new ResponseEntity<Object>("Exception occured. Server error", new HttpHeaders(),
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}

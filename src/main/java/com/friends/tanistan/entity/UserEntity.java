@@ -1,26 +1,31 @@
 package com.friends.tanistan.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.friends.tanistan.enums.AttemptType;
 
 @Entity
-@Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
 //@Builder
 //@AllArgsConstructor
 //@NoArgsConstructor
+@Table(name = "tanistan_user", uniqueConstraints = {@UniqueConstraint(columnNames = {"accountName", "emailAddress"})})
 public class UserEntity extends TanistanBaseEntity<String> {
 
 	// user informations
@@ -32,17 +37,21 @@ public class UserEntity extends TanistanBaseEntity<String> {
 	private String emailAddress;
 	private String phoneNumber;
 	private String secretQuestion;
-
+	private String accountName;
+	
 	// basic security
 	private String secretAnswer;
 	@Lob
 	private String accountPhrase;
-	private String accountName;
+
 
 	private Integer loginAttempt = 0;
 
 	@Enumerated(value = EnumType.STRING)
 	private AttemptType attemptType;
+
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	private Set<UserAuthorization> userAuthorization;
 
 	public UserEntity() {
 		super();
@@ -120,14 +129,6 @@ public class UserEntity extends TanistanBaseEntity<String> {
 		this.accountPhrase = accountPhrase;
 	}
 
-	public String getAccountName() {
-		return accountName;
-	}
-
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
-
 	public Integer getLoginAttempt() {
 		return loginAttempt;
 	}
@@ -144,4 +145,19 @@ public class UserEntity extends TanistanBaseEntity<String> {
 		this.attemptType = attemptType;
 	}
 
+	public Set<UserAuthorization> getUserAuthorization() {
+		return userAuthorization;
+	}
+
+	public void setUserAuthorization(Set<UserAuthorization> userAuthorization) {
+		this.userAuthorization = userAuthorization;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
 }

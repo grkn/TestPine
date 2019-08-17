@@ -38,7 +38,20 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.1.7.RELEASE'
 	// https://mvnrepository.com/artifact/com.h2database/h2
-	compile group: 'com.h2database', name: 'h2', version: '1.4.199'
+	compile group: 'com.h2database', name: 'h2', version: '1.4.196'
+	
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
+	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.10.RELEASE'
+	// https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
+	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.6.RELEASE'
+	// https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+	compile group: 'org.flywaydb', name: 'flyway-core', version: '5.2.4'
+
+
+	
+	compile('javax.xml.bind:jaxb-api:2.3.0')
+	compile('javax.activation:activation:1.1')
+	compile('org.glassfish.jaxb:jaxb-runtime:2.3.0')
 	
 	// https://mvnrepository.com/artifact/org.projectlombok/lombok
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'

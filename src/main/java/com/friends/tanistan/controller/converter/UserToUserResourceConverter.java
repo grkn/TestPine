@@ -1,7 +1,10 @@
 package com.friends.tanistan.controller.converter;
 
+import java.util.stream.Collectors;
+
 import org.springframework.core.convert.converter.Converter;
 
+import com.friends.tanistan.controller.resource.UserAuthorizationResource;
 import com.friends.tanistan.controller.resource.UserResource;
 import com.friends.tanistan.entity.UserEntity;
 
@@ -19,6 +22,11 @@ public class UserToUserResourceConverter implements Converter<UserEntity, UserRe
 		userResource.setPhoneNumber(source.getPhoneNumber());
 		userResource.setSecretQuestion(source.getSecretQuestion());
 		userResource.setAccountName(source.getAccountName());
+		userResource.setUserAuthorization(source.getUserAuthorization().stream().map(uAuth -> {
+			UserAuthorizationResource userAuthorizationResource = new UserAuthorizationResource();
+			userAuthorizationResource.setAuthorization(uAuth.getAuthority());
+			return userAuthorizationResource;
+		}).collect(Collectors.toSet()));
 		return userResource;
 	}
 

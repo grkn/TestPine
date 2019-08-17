@@ -1,8 +1,11 @@
 package com.friends.tanistan.controller.converter;
 
+import java.util.stream.Collectors;
+
 import org.springframework.core.convert.converter.Converter;
 
 import com.friends.tanistan.controller.dto.UserDto;
+import com.friends.tanistan.entity.UserAuthorization;
 import com.friends.tanistan.entity.UserEntity;
 import com.friends.tanistan.enums.AttemptType;
 
@@ -19,13 +22,19 @@ public class UserDtoToUserEntityConverter implements Converter<UserDto, UserEnti
 		userEntity.setPhoneNumber(source.getPhoneNumber());
 		userEntity.setSecretQuestion(source.getSecretQuestion());
 		userEntity.setAccountName(source.getAccountName());
+		userEntity.setUserAuthorization(source.getUserAuthorzation().stream().map(uAuth -> {
+			UserAuthorization userAuthorization = new UserAuthorization();
+			userAuthorization.setAuthority(uAuth.getAuhtorization());
+			userAuthorization.setUserEntity(userEntity);
+			return userAuthorization;
+		}).collect(Collectors.toSet()));
 
 		userEntity.setSecretAnswer(source.getSecretAnswer());
-		
-		if(source.getAttemptType() != null) {
+
+		if (source.getAttemptType() != null) {
 			userEntity.setAttemptType(AttemptType.valueOf(source.getAttemptType()));
 		}
-		if(source.getLoginAttempt() != null) {
+		if (source.getLoginAttempt() != null) {
 			userEntity.setLoginAttempt(source.getLoginAttempt());
 		}
 

@@ -1,6 +1,7 @@
 package com.friends.tanistan.controller.resource;
 
 import java.util.Date;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -16,6 +17,8 @@ public class UserResource {
 	private String phoneNumber;
 	private String secretQuestion;
 	private String accountName;
+	private Set<UserAuthorizationResource> userAuthorization;
+
 
 	public String getName() {
 		return name;
@@ -73,20 +76,28 @@ public class UserResource {
 		this.secretQuestion = secretQuestion;
 	}
 
-	public String getAccountName() {
-		return accountName;
-	}
-
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
-
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public Set<UserAuthorizationResource> getUserAuthorization() {
+		return userAuthorization;
+	}
+
+	public void setUserAuthorization(Set<UserAuthorizationResource> userAuthorization) {
+		this.userAuthorization = userAuthorization;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
 	}
 
 }
