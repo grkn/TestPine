@@ -53,7 +53,7 @@ I will write Unit Tests, Integration Test, E2E test.
 
 ***   client_id: grkn
 
-***   client_secret : grkn
+***   client_secret : It is written in the console as Encoded Password : ....
 
 ***********************************
 
