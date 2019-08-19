@@ -7,12 +7,10 @@ import com.friends.tanistan.repository.UserAuthorizationRepository;
 import com.friends.tanistan.repository.UserRepository;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 
 /**
  * TO BE DELETED
@@ -53,7 +51,6 @@ public class InitializeRootUser {
         userAuth.setAuthority("ROLE_ADMIN");
         userAuth.setUserEntity(userEntity);
 
-
         UserAuthorization userAuth2 = new UserAuthorization();
         userAuth2.setAuthority("ROLE_USER");
         userAuth2.setUserEntity(userEntity);
@@ -65,9 +62,12 @@ public class InitializeRootUser {
         userAuthorizationRepository.save(userAuth);
         userAuthorizationRepository.save(userAuth2);
 
-        try{
-            oAuthClientDetailsRepository.insertAccessToken("grkn",encodedPassword,"ROLE_ADMIN,ROLE_USER");
-        }catch (Exception ex) {
+        try {
+            // For root 1 hour to accessToken, 1 year to refreshTokenValidity
+            oAuthClientDetailsRepository
+                    .insertAccessToken("grkn", encodedPassword, "ROLE_ADMIN,ROLE_USER", 60 * 60,
+                            60 * 60 * 24 * 365);
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 

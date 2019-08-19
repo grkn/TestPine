@@ -44,10 +44,11 @@ public class UserService<T extends UserEntity> extends BaseService {
         if (userRepository
                 .existsByAccountNameOrEmailAddress(userEntity.getAccountName(), userEntity.getEmailAddress())) {
             throw new AlreadyExistsException(ErrorResource.ErrorContent.builder().message(
-                    String.format("User is already exist by given emailAddress: %s or account: %s",
+                    String.format("User is already exist by given email address: %s or account: %s",
                             userEntity.getAccountName(), userEntity.getEmailAddress())).build(""));
         }
         String password = userEntity.getAccountPhrase();
+
         userEntity.setAccountPhrase(passwordEncoder.encode(password));
         setDefaultAuthorization(userEntity);
 
@@ -160,8 +161,9 @@ public class UserService<T extends UserEntity> extends BaseService {
     }
 
     private void setAccessToken(UserEntity userEntity, String password) {
+        // 30 days to refreshToken, 15 min to accessToken
         oAuthClientDetailsRepository
-                .insertAccessToken(userEntity.getEmailAddress(), password, DEFAULT_AUTH);
+                .insertAccessToken(userEntity.getEmailAddress(), password, DEFAULT_AUTH, 900, 2592000);
     }
 
 }

@@ -20,14 +20,16 @@ public class OAuthClientDetailsRepositoryImpl implements OAuthClientDetailsRepos
     }
 
     @Override
-    public void insertAccessToken(String clientId, String clientSecret, String roles) {
+    public void insertAccessToken(String clientId, String clientSecret, String roles, int accessTokenValiditySecond,
+            long refreshTokenValiditySecond) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         String insertScript = "INSERT INTO OAUTH_CLIENT_DETAILS  "
                 + "(client_id, client_secret, scope, authorized_grant_types,  "
                 + "authorities, access_token_validity, refresh_token_validity) VALUES "
                 + "(?,?, "
-                + " 'read,write', 'password,refresh_token,client_credentials,authorization_code',?, 900, 2592000)";
-        jdbcTemplate.update(insertScript, clientId, passwordEncoder.encode(clientSecret), roles);
+                + " 'read,write', 'password,refresh_token,client_credentials,authorization_code',?, ?, ?)";
+        jdbcTemplate.update(insertScript, clientId, passwordEncoder.encode(clientSecret), roles, accessTokenValiditySecond,
+                refreshTokenValiditySecond);
     }
 
     @Override
