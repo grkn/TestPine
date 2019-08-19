@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e98736f8-f5f8-4e28-b186-b7cc5f82f082",
+		"_postman_id": "6af6d3e6-a85a-4103-808a-6d22b7192a52",
 		"name": "gurkan",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -21,6 +21,26 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MTk2ODg5LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjdlYWIyNzU3LWIxOWEtNDY3Ny1hNTdiLTQ0M2RjZTRlM2Y2NiIsImNsaWVudF9pZCI6Imdya24ifQ.PytcIC3UYd65YDjMOTRsj2533ZARZRu3lnQrGQ_xIig",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -52,6 +72,21 @@
 		{
 			"name": "getUserById",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MTk1OTAwLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6ImQ5NDZkNWVkLTY1YmItNDY5MC05OTJiLTNmNDhjY2I4OTcwNSIsImNsaWVudF9pZCI6Imdya24ifQ.nV5-GhputIVMD4ggt8E5Sa8fPlaUqJNirzsGcysfRTA",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -85,6 +120,26 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjA2MDc0LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjZkMzBkNDM2LTVlY2UtNGQ5MC05OWNhLWRkNTkzNjM0MGQ1MSIsImNsaWVudF9pZCI6Imdya24ifQ.2oDsRQLLCPRYpZpi1FHs2gzaypnKAxrChlwOiwN6NTs",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -151,6 +206,150 @@
 						"tanistan",
 						"user",
 						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllAuthorizations",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjA0MDc1LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjYxY2E2NTFmLWY3YWQtNDU4MS04NDg2LWEyMDczYjZjNmY3NSIsImNsaWVudF9pZCI6Imdya24ifQ.rNe2dgs4PSUdbv16Nhv_xp6_SF7Zc4hX4gXM7HF7_FM",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/tanistan/auhtorization/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"auhtorization",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createRoleBulk",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjA2MDc0LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjZkMzBkNDM2LTVlY2UtNGQ5MC05OWNhLWRkNTkzNjM0MGQ1MSIsImNsaWVudF9pZCI6Imdya24ifQ.2oDsRQLLCPRYpZpi1FHs2gzaypnKAxrChlwOiwN6NTs",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"authorizations\" : [\"ROLE_TEST\",\"ROLE_ADDED\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/tanistan/auhtorization",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"auhtorization"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addAuthorizationToUser",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjA2MDc0LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjZkMzBkNDM2LTVlY2UtNGQ5MC05OWNhLWRkNTkzNjM0MGQ1MSIsImNsaWVudF9pZCI6Imdya24ifQ.2oDsRQLLCPRYpZpi1FHs2gzaypnKAxrChlwOiwN6NTs",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"authorizations\" : [\"ROLE_TEST\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/tanistan/auhtorization/8802d71f-4047-4959-9fea-124a206afb69",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tanistan",
+						"auhtorization",
+						"8802d71f-4047-4959-9fea-124a206afb69"
 					]
 				}
 			},

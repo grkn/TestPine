@@ -1,9 +1,10 @@
 package com.friends.tanistan.config;
 
-import java.util.Optional;
-
-import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Value;
+import com.friends.tanistan.controller.converter.UserAuthorizationToUserAuthorizationDtoConverter;
+import com.friends.tanistan.controller.converter.UserDtoToUserEntityConverter;
+import com.friends.tanistan.controller.converter.UserToUserResourceConverter;
+import com.friends.tanistan.entity.UserEntity;
+import com.friends.tanistan.service.UserService;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.friends.tanistan.controller.converter.UserDtoToUserEntityConverter;
-import com.friends.tanistan.controller.converter.UserToUserResourceConverter;
-import com.friends.tanistan.entity.UserEntity;
-import com.friends.tanistan.service.UserService;
+import java.util.Optional;
 
 @Configuration
 @EntityScan("com.friends.tanistan.entity")
@@ -28,35 +26,36 @@ import com.friends.tanistan.service.UserService;
 @EnableJpaRepositories("com.friends.tanistan.repository")
 public class GlobalConfig {
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	@Primary
-	public ConversionService conversionService() {
-		GenericConversionService conversionService = new GenericConversionService();
-		conversionService.addConverter(new UserToUserResourceConverter());
-		conversionService.addConverter(new UserDtoToUserEntityConverter());
-		return conversionService;
-	}
+    @Bean
+    @Primary
+    public ConversionService conversionService() {
+        GenericConversionService conversionService = new GenericConversionService();
+        conversionService.addConverter(new UserToUserResourceConverter());
+        conversionService.addConverter(new UserDtoToUserEntityConverter());
+        conversionService.addConverter(new UserAuthorizationToUserAuthorizationDtoConverter());
+        return conversionService;
+    }
 
-	@Component
-	public class TanistanAuditing implements AuditorAware<String> {
+    @Component
+    public class TanistanAuditing implements AuditorAware<String> {
 
-		private final UserService<UserEntity> userService;
+        private final UserService<UserEntity> userService;
 
-		public TanistanAuditing(UserService<UserEntity> userService) {
-			this.userService = userService;
-		}
+        public TanistanAuditing(UserService<UserEntity> userService) {
+            this.userService = userService;
+        }
 
-		@Override
-		public Optional<String> getCurrentAuditor() {
-			// TODO Auto-generated method stub
-			return Optional.of(userService.getCurrentUser());
-		}
+        @Override
+        public Optional<String> getCurrentAuditor() {
+            // TODO Auto-generated method stub
+            return Optional.of(userService.getCurrentUser());
+        }
 
-	}
+    }
 
 }

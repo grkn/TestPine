@@ -1,22 +1,15 @@
 package com.friends.tanistan.controller.dto;
 
 public class UserAuthorizationDto {
-	private String auhtorization;
-	private String accountName;
 
-	public String getAuhtorization() {
-		return auhtorization;
-	}
+    private String auhtorization;
 
-	public void setAuhtorization(String auhtorization) {
-		this.auhtorization = auhtorization;
-	}
+    public String getAuhtorization() {
+        return auhtorization;
+    }
 
-	public String getAccountName() {
-		return accountName;
-	}
+    public void setAuhtorization(String auhtorization) {
+        this.auhtorization = auhtorization;
+    }
 
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
 }
