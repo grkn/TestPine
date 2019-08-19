@@ -47,3 +47,19 @@ As TDD
 I will write Unit Tests, Integration Test, E2E test.
 
 
+************************************
+
+***   admin
+
+***   client_id: grkn
+
+***   client_secret : grkn
+
+***********************************
+
+Postman scripts are in the project.
+
+Auhtorization, Authentication and Method level security completeley working
+clone project, run project, test with postman scripts...
+
+
