@@ -1,7 +1,8 @@
 package com.friends.tanistan.controller.resource;
 
 public class UserAuthorizationResource {
-	
+
+	private String id;
 	private String authorization;
 
 	public String getAuthorization() {
@@ -10,5 +11,13 @@ public class UserAuthorizationResource {
 
 	public void setAuthorization(String authorization) {
 		this.authorization = authorization;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

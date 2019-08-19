@@ -12,9 +12,8 @@ plugins {
     id 'application'
 }
 
-application {
-    mainClassName = 'com.friends.tanistan.Application'
-}
+mainClassName = 'com.friends.tanistan.Application'
+
 
 repositories {
     // Use jcenter for resolving dependencies.
