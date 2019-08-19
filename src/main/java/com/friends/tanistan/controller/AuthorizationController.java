@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,7 @@ public class AuthorizationController {
     }
 
     @PostMapping
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserAuthorizationResource>> createAuthorizationBulk(
             @RequestBody UserAuthorizationListDto userAuthorizationListDto) {
         final List<UserAuthorization> userAuthorizationList = new ArrayList<>();
@@ -55,18 +57,8 @@ public class AuthorizationController {
 
     }
 
-    @PostMapping(value = "/{id}")
-    public ResponseEntity<UserResource> giveAuthorizationToUser(@PathVariable("id") String userId,
-            @RequestBody UserAuthorizationListDto userAuthorizationListDto) {
-        final List<UserAuthorization> userAuthorizationList = new ArrayList<>();
-        userAuthorizationListDto.getAuthorizations()
-                .forEach(auth -> userAuthorizationList.add(new UserAuthorization(auth)));
-
-        UserEntity user = userAuthorizationService.givePermissionToUser(userId, userAuthorizationList);
-        return ResponseEntity.ok(conversionService.convert(user, UserResource.class));
-    }
-
     @GetMapping("/all")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<Page<UserAuthorizationResource>> giveAuthorizationToUser(@PageableDefault Pageable pageable) {
         Page<UserAuthorization> userAuthorizationPage = userAuthorizationService.findAll(pageable);
         final List<UserAuthorizationResource> userAuthorizationResourceList = new ArrayList<>();

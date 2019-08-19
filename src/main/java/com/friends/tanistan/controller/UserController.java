@@ -1,15 +1,20 @@
 package com.friends.tanistan.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.friends.tanistan.controller.dto.UserAuthorizationListDto;
+import com.friends.tanistan.entity.UserAuthorization;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -37,6 +42,7 @@ public class UserController {
 	}
 
 	@PostMapping
+	@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
 	public ResponseEntity<UserResource> createUser(@RequestBody @Valid UserDto userDto) {
 		UserEntity userEntity = conversionService.convert(userDto, UserEntity.class);
 		UserResource userResource = conversionService.convert(userService.createUserEntity(userEntity),
@@ -45,27 +51,43 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/all")
+	@PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 	public ResponseEntity<Page<UserResource>> getUsers(@PageableDefault Pageable pageable) {
 		Page<UserEntity> result = userService.getUsers(pageable);
 		return ResponseEntity.of(Optional.of(result.map(item -> conversionService.convert(item, UserResource.class))));
 	}
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_USER')")
 	public ResponseEntity<UserResource> getUserById(@PathVariable String id) {
 		UserEntity result = userService.getUserById(id);
 		return ResponseEntity.of(Optional.of(conversionService.convert(result, UserResource.class)));
 	}
 
 	@PatchMapping(value = "/{id}")
+	@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
 	public ResponseEntity<UserResource> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
 		UserEntity result = userService.updateUser(id, conversionService.convert(userDto, UserEntity.class));
 		return ResponseEntity.of(Optional.of(conversionService.convert(result, UserResource.class)));
 	}
 
 	@DeleteMapping(value = "/{id}")
+	@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> deleteUser(@PathVariable String id) {
 		userService.deleteUser(id);
 		return ResponseEntity.noContent().build();
 
+	}
+
+	@PostMapping(value = "/{id}")
+	@PreAuthorize(value = "hasAnyRole('ROLE_ADMIN')")
+	public ResponseEntity<UserResource> giveAuthorizationToUser(@PathVariable("id") String userId,
+			@RequestBody UserAuthorizationListDto userAuthorizationListDto) {
+		final List<UserAuthorization> userAuthorizationList = new ArrayList<>();
+		userAuthorizationListDto.getAuthorizations()
+				.forEach(auth -> userAuthorizationList.add(new UserAuthorization(auth)));
+
+		UserEntity user = userService.givePermissionToUser(userId, userAuthorizationList);
+		return ResponseEntity.ok(conversionService.convert(user, UserResource.class));
 	}
 }

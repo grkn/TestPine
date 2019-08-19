@@ -181,8 +181,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-			oauthServer.tokenKeyAccess("hasAuthority('ROLE_ADMIN')")
-					.checkTokenAccess("hasAuthority('ROLE_ADMIN')");
+			oauthServer.tokenKeyAccess("hasAuthority('ROLE_ADMIN','ROLE_USER')")
+					.checkTokenAccess("hasAuthority('ROLE_ADMIN','ROLE_USER')");
 		}
 	}
 	

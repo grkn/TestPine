@@ -2,6 +2,7 @@ package com.friends.tanistan.tobedeleted;
 
 import com.friends.tanistan.entity.UserAuthorization;
 import com.friends.tanistan.entity.UserEntity;
+import com.friends.tanistan.repository.OAuthClientDetailsRepository;
 import com.friends.tanistan.repository.UserAuthorizationRepository;
 import com.friends.tanistan.repository.UserRepository;
 import com.google.common.collect.Sets;
@@ -33,7 +34,8 @@ public class InitializeRootUser {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    DataSource dataSource;
+    private OAuthClientDetailsRepository oAuthClientDetailsRepository;
+
 
     // TO BE DELETED
     @PostConstruct
@@ -63,18 +65,11 @@ public class InitializeRootUser {
         userAuthorizationRepository.save(userAuth);
         userAuthorizationRepository.save(userAuth2);
 
-        try {
-            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-            jdbcTemplate.update("INSERT INTO OAUTH_CLIENT_DETAILS  "
-                    + "(client_id, client_secret, scope, authorized_grant_types,  "
-                    + "authorities, access_token_validity, refresh_token_validity) VALUES "
-                    + "('grkn','" + encodedPassword
-                    + "', 'read,write', 'password,refresh_token,client_credentials,authorization_code', 'ROLE_ADMIN,ROLE_USER', 900, 2592000)");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        try{
+            oAuthClientDetailsRepository.insertAccessToken("grkn",encodedPassword,"ROLE_ADMIN,ROLE_USER");
+        }catch (Exception ex) {
+            ex.printStackTrace();
         }
+
     }
 }

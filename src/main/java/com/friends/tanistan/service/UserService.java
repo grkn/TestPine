@@ -1,30 +1,58 @@
 package com.friends.tanistan.service;
 
 import com.friends.tanistan.controller.resource.ErrorResource;
+import com.friends.tanistan.entity.UserAuthorization;
 import com.friends.tanistan.entity.UserEntity;
+import com.friends.tanistan.exception.AlreadyExistsException;
 import com.friends.tanistan.exception.NotFoundException;
+import com.friends.tanistan.repository.OAuthClientDetailsRepository;
+import com.friends.tanistan.repository.UserAuthorizationRepository;
 import com.friends.tanistan.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService<T extends UserEntity> extends BaseService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserAuthorizationRepository userAuthorizationRepository;
+    private final OAuthClientDetailsRepository oAuthClientDetailsRepository;
+    private static final String DEFAULT_AUTH = "ROLE_USER";
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+            UserAuthorizationRepository userAuthorizationRepository,
+            OAuthClientDetailsRepository oAuthClientDetailsRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userAuthorizationRepository = userAuthorizationRepository;
+        this.oAuthClientDetailsRepository = oAuthClientDetailsRepository;
     }
 
+    @Transactional
     public UserEntity createUserEntity(UserEntity userEntity) {
-        userEntity.setAccountPhrase(passwordEncoder.encode(userEntity.getAccountPhrase()));
-        return userRepository.save(userEntity);
+        if (userRepository
+                .existsByAccountNameOrEmailAddress(userEntity.getAccountName(), userEntity.getEmailAddress())) {
+            throw new AlreadyExistsException(ErrorResource.ErrorContent.builder().message(
+                    String.format("User is already exist by given emailAddress: {} or account: {}",
+                            userEntity.getAccountName(), userEntity.getEmailAddress())).build(""));
+        }
+        String password = userEntity.getAccountPhrase();
+        userEntity.setAccountPhrase(passwordEncoder.encode(password));
+        setDefaultAuthorization(userEntity);
+
+        userEntity = userRepository.save(userEntity);
+        setAccessToken(userEntity,password);
+        return userEntity;
     }
 
     public Page<UserEntity> getUsers(Pageable pageable) {
@@ -41,6 +69,30 @@ public class UserService<T extends UserEntity> extends BaseService {
         overrideVariables(user, userEntity);
         return userRepository.save(userEntity);
     }
+
+    @Transactional
+    public UserEntity givePermissionToUser(String userId, List<UserAuthorization> userAuthorizations) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUserAuthorization(new HashSet<>());
+
+        userAuthorizations.forEach(
+                userAuthorization -> {
+                    Optional<UserAuthorization> userAuthorizationOptional = userAuthorizationRepository
+                            .findByAuthority(userAuthorization.getAuthority());
+                    if (!userAuthorizationOptional.isPresent()) {
+                        throw new NotFoundException(ErrorResource.ErrorContent.builder().message(
+                                String.format("Authorization can not be found by given name : %s",
+                                        userAuthorization.getAuthority())).build(""));
+
+
+                    } else {
+                        userEntity.getUserAuthorization().add(userAuthorizationOptional.get());
+                    }
+                });
+
+        return updateUser(userId, userEntity);
+    }
+
 
     public void deleteUser(String id) {
         userRepository.deleteById(id);
@@ -87,6 +139,20 @@ public class UserService<T extends UserEntity> extends BaseService {
         if (userEntity.getAccountPhrase() != null) {
             userEntity.setAccountPhrase(passwordEncoder.encode(userEntity.getAccountPhrase()));
         }
+    }
+
+    private void setDefaultAuthorization(UserEntity userEntity) {
+        UserAuthorization userAuthorization = userAuthorizationRepository.findByAuthority(DEFAULT_AUTH).get();
+        userAuthorization.setUserEntity(userEntity);
+
+        userEntity.setUserAuthorization(new HashSet<>());
+        userEntity.getUserAuthorization().add(userAuthorizationRepository.save(userAuthorization));
+
+    }
+
+    private void setAccessToken(UserEntity userEntity, String password) {
+        oAuthClientDetailsRepository
+                .insertAccessToken(userEntity.getEmailAddress(), password, DEFAULT_AUTH);
     }
 
 }
