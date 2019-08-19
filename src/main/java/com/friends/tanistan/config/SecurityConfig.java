@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests().antMatchers("/tanistan/**").fullyAuthenticated().and()
                 .authenticationProvider(customAuthenticationProvider).sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().formLogin().loginProcessingUrl("/login")
+                .loginPage("/login.html")
                 .usernameParameter("username").passwordParameter("password");
     }
 

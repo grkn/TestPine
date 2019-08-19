@@ -9,6 +9,7 @@ import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 
@@ -33,39 +34,44 @@ public class InitializeRootUser {
 
     @Autowired
     private OAuthClientDetailsRepository oAuthClientDetailsRepository;
-
+    
+    private final static String CLIENT_ID = "grkn";
+    private final static String PASSWORD = "grkn";
 
     // TO BE DELETED
     @PostConstruct
+    @Transactional
     public void setUp() {
 
-        String encodedPassword = passwordEncoder.encode("grkn");
-
+        String encodedPassword = passwordEncoder.encode(PASSWORD);
+        System.out.println("******************************");
+        System.out.println("Encoded Password : " + encodedPassword);
+        System.out.println("******************************");
         UserEntity userEntity = new UserEntity();
-        userEntity.setAccountName("grkn");
+        userEntity.setAccountName(CLIENT_ID);
         userEntity.setAccountPhrase(encodedPassword);
         userEntity.setEmailAddress("gurkanilleez@gmail.com");
-
+        userEntity = userRepository.save(userEntity);
+        
         // AUTHS
         UserAuthorization userAuth = new UserAuthorization();
         userAuth.setAuthority("ROLE_ADMIN");
         userAuth.setUserEntity(userEntity);
+        userAuthorizationRepository.save(userAuth);
 
         UserAuthorization userAuth2 = new UserAuthorization();
         userAuth2.setAuthority("ROLE_USER");
         userAuth2.setUserEntity(userEntity);
-
-        userEntity.setUserAuthorization(Sets.newHashSet(userAuth, userAuth2));
-
-        userRepository.save(userEntity);
-
-        userAuthorizationRepository.save(userAuth);
         userAuthorizationRepository.save(userAuth2);
 
+        
+        userEntity.setUserAuthorization(Sets.newHashSet(userAuth, userAuth2));
+        userRepository.save(userEntity);
+        
         try {
             // For root 1 hour to accessToken, 1 year to refreshTokenValidity
             oAuthClientDetailsRepository
-                    .insertAccessToken("grkn", encodedPassword, "ROLE_ADMIN,ROLE_USER", 60 * 60,
+                    .insertAccessToken(CLIENT_ID, encodedPassword, "ROLE_ADMIN,ROLE_USER", 60 * 60,
                             60 * 60 * 24 * 365);
         } catch (Exception ex) {
             ex.printStackTrace();
