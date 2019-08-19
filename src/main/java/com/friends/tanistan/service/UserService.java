@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,7 @@ public class UserService<T extends UserEntity> extends BaseService {
         if (userRepository
                 .existsByAccountNameOrEmailAddress(userEntity.getAccountName(), userEntity.getEmailAddress())) {
             throw new AlreadyExistsException(ErrorResource.ErrorContent.builder().message(
-                    String.format("User is already exist by given emailAddress: {} or account: {}",
+                    String.format("User is already exist by given emailAddress: %s or account: %s",
                             userEntity.getAccountName(), userEntity.getEmailAddress())).build(""));
         }
         String password = userEntity.getAccountPhrase();
@@ -51,7 +52,7 @@ public class UserService<T extends UserEntity> extends BaseService {
         setDefaultAuthorization(userEntity);
 
         userEntity = userRepository.save(userEntity);
-        setAccessToken(userEntity,password);
+        setAccessToken(userEntity, password);
         return userEntity;
     }
 
@@ -125,7 +126,15 @@ public class UserService<T extends UserEntity> extends BaseService {
             userEntity.setSecretQuestion(user.getSecretQuestion());
         }
         if (!CollectionUtils.isEmpty(user.getUserAuthorization())) {
-            userEntity.getUserAuthorization().addAll(user.getUserAuthorization());
+            user.getUserAuthorization().forEach(userAuthorization -> {
+                userAuthorization.setUserEntity(userEntity);
+                userEntity.getUserAuthorization().add(userAuthorization);
+            });
+
+            List<String> auths = new ArrayList<>();
+            userEntity.getUserAuthorization().forEach(userAuthorization -> auths.add(userAuthorization.getAuthority()));
+
+            oAuthClientDetailsRepository.updateAuthorities(auths, userEntity.getEmailAddress());
         }
         if (!StringUtils.isEmpty(user.getSecretAnswer())) {
             userEntity.setSecretAnswer(user.getSecretAnswer());

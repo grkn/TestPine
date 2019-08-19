@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class OAuthClientDetailsRepositoryImpl implements OAuthClientDetailsRepository {
@@ -27,5 +28,14 @@ public class OAuthClientDetailsRepositoryImpl implements OAuthClientDetailsRepos
                 + "(?,?, "
                 + " 'read,write', 'password,refresh_token,client_credentials,authorization_code',?, 900, 2592000)";
         jdbcTemplate.update(insertScript, clientId, passwordEncoder.encode(clientSecret), roles);
+    }
+
+    @Override
+    public void updateAuthorities(List<String> authorities, String clientId) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        String updateScript = "UPDATE OAUTH_CLIENT_DETAILS SET authorities = ? WHERE client_id = ?";
+        jdbcTemplate
+                .update(updateScript, authorities.toString().substring(1, authorities.toString().length() - 1),
+                        clientId);
     }
 }
