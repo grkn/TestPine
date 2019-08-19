@@ -2,7 +2,7 @@
 
 As a first step i completed oAuth2 server, and login Authentication mechanism.
 
-Also I completed endpoints for user management system.
+Also I completed endpoints for user management system (User And Authorization Endpoints Added).
 
 I used various technologies to complete a backbone of a micro service structure.
 
