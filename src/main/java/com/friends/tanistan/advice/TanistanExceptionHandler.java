@@ -3,6 +3,8 @@ package com.friends.tanistan.advice;
 import com.friends.tanistan.controller.resource.ErrorResource;
 import com.friends.tanistan.exception.AlreadyExistsException;
 import com.friends.tanistan.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class TanistanExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private Logger logger = LoggerFactory.getLogger(TanistanExceptionHandler.class);
 
     @ExceptionHandler({NotFoundException.class})
     @ResponseBody
@@ -38,16 +42,17 @@ public class TanistanExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.UNAUTHORIZED);
     }
 
-    // Latest Solution
     @ExceptionHandler({InsufficientAuthenticationException.class})
     public ResponseEntity<Object> donthandleException(Exception ex, WebRequest request) throws Exception {
-        throw ex;
+        logger.error("Authenticate error :",ex);
+        return new ResponseEntity<Object>("Permission Denied by Authentication mechanism", new HttpHeaders(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Latest Solution
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<Object> handleExceptionLatest(Exception ex, WebRequest request) {
-        ex.printStackTrace();
+        logger.error("Unknown error :",ex);
         return new ResponseEntity<Object>("Exception occured. Server error", new HttpHeaders(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
