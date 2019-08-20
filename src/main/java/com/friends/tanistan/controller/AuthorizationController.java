@@ -59,7 +59,7 @@ public class AuthorizationController {
 
     @GetMapping("/all")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<Page<UserAuthorizationResource>> giveAuthorizationToUser(@PageableDefault Pageable pageable) {
+    public ResponseEntity<Page<UserAuthorizationResource>> findAllAuthorizations(@PageableDefault Pageable pageable) {
         Page<UserAuthorization> userAuthorizationPage = userAuthorizationService.findAll(pageable);
         final List<UserAuthorizationResource> userAuthorizationResourceList = new ArrayList<>();
         userAuthorizationPage
