@@ -14,8 +14,6 @@ import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -25,11 +23,6 @@ import java.util.Optional;
 @EnableJpaAuditing
 @EnableJpaRepositories("com.friends.tanistan.repository")
 public class GlobalConfig {
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     @Primary

@@ -26,7 +26,7 @@
 					"oauth2": [
 						{
 							"key": "accessToken",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MTk2ODg5LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjdlYWIyNzU3LWIxOWEtNDY3Ny1hNTdiLTQ0M2RjZTRlM2Y2NiIsImNsaWVudF9pZCI6Imdya24ifQ.PytcIC3UYd65YDjMOTRsj2533ZARZRu3lnQrGQ_xIig",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjI0ODI1LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6ImIxMDc1MWI0LTBkZTEtNDI4My1hYTBjLTZlY2E1Mzc2YjU2NCIsImNsaWVudF9pZCI6Imdya24ifQ.PswRDcFjzD-jBuJsHY1w1D0NmnZ7u0ZnN4h6JrcTpyo",
 							"type": "string"
 						},
 						{
@@ -52,10 +52,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\" : \"name1\",\n\t\"lastName\" : \"lastName1\",\n\t\"birthDay\" : \"31-01-1985\",\n\t\"emailAddress\" : \"gurkan.illeez@gmail.com\",\n\t\"accountPhrase\" : \"password\"\n}"
+					"raw": "{\n\t\"name\" : \"name1\",\n\t\"lastName\" : \"lastName1\",\n\t\"birthDay\" : \"31-01-1985\",\n\t\"emailAddress\" : \"test11@test.com\",\n\t\"accountPhrase\" : \"test11\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/tanistan/user",
+					"raw": "http://localhost:8082/tanistan/user/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -63,7 +63,8 @@
 					"port": "8082",
 					"path": [
 						"tanistan",
-						"user"
+						"user",
+						""
 					]
 				}
 			},
@@ -88,7 +89,14 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8082/tanistan/user/{{user_id}}",
 					"protocol": "http",
@@ -125,7 +133,7 @@
 					"oauth2": [
 						{
 							"key": "accessToken",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjA2MDc0LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjZkMzBkNDM2LTVlY2UtNGQ5MC05OWNhLWRkNTkzNjM0MGQ1MSIsImNsaWVudF9pZCI6Imdya24ifQ.2oDsRQLLCPRYpZpi1FHs2gzaypnKAxrChlwOiwN6NTs",
+							"value": "",
 							"type": "string"
 						},
 						{
@@ -141,7 +149,13 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8082/tanistan/user/all",
 					"protocol": "http",
@@ -175,7 +189,7 @@
 					"raw": "{\n\t\"name\" : \"name2\",\n\t\"lastName\" : \"lastName2\",\n\t\"birthDay\" : \"31-01-1982\",\n\t\"emailAddress\" : \"gurkan.illeez2@gmail.com\",\n\t\"accountPhrase\" : \"password2\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/tanistan/user/{{user_id}}",
+					"raw": "http://localhost:8082/tanistan/user/{{user_id}}?",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -185,6 +199,13 @@
 						"tanistan",
 						"user",
 						"{{user_id}}"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -196,7 +217,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8082/tanistan/user/{{user_id}}",
+					"raw": "http://localhost:8082/tanistan/user/{{user_id}}?Content-Type=application/json",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -206,6 +227,12 @@
 						"tanistan",
 						"user",
 						"{{user_id}}"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
 					]
 				}
 			},
@@ -219,7 +246,7 @@
 					"oauth2": [
 						{
 							"key": "accessToken",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjA0MDc1LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjYxY2E2NTFmLWY3YWQtNDU4MS04NDg2LWEyMDczYjZjNmY3NSIsImNsaWVudF9pZCI6Imdya24ifQ.rNe2dgs4PSUdbv16Nhv_xp6_SF7Zc4hX4gXM7HF7_FM",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjE3MzQ2LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6ImFjZGYyNTliLTdlYTAtNGVhMi04ZWFhLTg0YjMxMGVmYTVhNyIsImNsaWVudF9pZCI6Imdya24ifQ.yNgy8PAoR6CYU8_NFbmHy-SyirYXQWh-v4nVaNIRyBs",
 							"type": "string"
 						},
 						{
@@ -235,7 +262,14 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8082/tanistan/auhtorization/all",
 					"protocol": "http",
@@ -311,7 +345,7 @@
 					"oauth2": [
 						{
 							"key": "accessToken",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2MjA2MDc0LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjZkMzBkNDM2LTVlY2UtNGQ5MC05OWNhLWRkNTkzNjM0MGQ1MSIsImNsaWVudF9pZCI6Imdya24ifQ.2oDsRQLLCPRYpZpi1FHs2gzaypnKAxrChlwOiwN6NTs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTY2Mjg5NzQ0LCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sImp0aSI6IjZkNjdmN2Q5LTRkYjEtNGRiNy1hN2FiLTlhZWE0ZDc3Y2U5OSIsImNsaWVudF9pZCI6InN3YWdnZXIyIn0.iuw1B6ojbOeGY2NGFMoKK4CncMKXU54qwtizYRVg7XE",
 							"type": "string"
 						},
 						{
@@ -337,10 +371,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"authorizations\" : [\"ROLE_TEST\"]\n}"
+					"raw": "{\n\t\"authorizations\" : [\"ROLE_TEST2\"]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/tanistan/auhtorization/8802d71f-4047-4959-9fea-124a206afb69",
+					"raw": "http://localhost:8082/tanistan/user/1f87d776-58f4-43ff-9a24-3ffd44744fbc",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -348,8 +382,8 @@
 					"port": "8082",
 					"path": [
 						"tanistan",
-						"auhtorization",
-						"8802d71f-4047-4959-9fea-124a206afb69"
+						"user",
+						"1f87d776-58f4-43ff-9a24-3ffd44744fbc"
 					]
 				}
 			},

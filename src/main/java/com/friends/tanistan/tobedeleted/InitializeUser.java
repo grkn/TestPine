@@ -47,30 +47,37 @@ public class InitializeUser {
 
     public void createPreDefinedUser(String clientId, String password, boolean isEncoded) {
         String encodedPassword = passwordEncoder.encode(password);
-        System.out.println("******************************");
-        System.out.println("Encoded Password : " + encodedPassword);
-        System.out.println("******************************");
+
+        if (isEncoded) {
+            System.out.println("******************************");
+            System.out.println("User : " + clientId + " -> Encoded Password : " + encodedPassword);
+            System.out.println("******************************");
+        }
+
         UserEntity userEntity = new UserEntity();
         userEntity.setAccountName(clientId);
         userEntity.setAccountPhrase(encodedPassword);
-        userEntity.setEmailAddress(CLIENT_ID + "@gmail.com");
+        userEntity.setEmailAddress(clientId);
         userEntity = userRepository.save(userEntity);
         userEntity.setUserAuthorization(Sets.newHashSet());
 
-        if(!userAuthorizationRepository.existsByAuthority("ROLE_ADMIN")) {
+        if (!userAuthorizationRepository.existsByAuthority("ROLE_ADMIN")) {
             UserAuthorization userAuth = new UserAuthorization();
             userAuth.setAuthority("ROLE_ADMIN");
             userAuth.setUserEntity(userEntity);
             userEntity.getUserAuthorization().add(userAuthorizationRepository.save(userAuth));
+        } else {
+            userEntity.getUserAuthorization().add(userAuthorizationRepository.findByAuthority("ROLE_ADMIN").get());
         }
 
-        if(!userAuthorizationRepository.existsByAuthority("ROLE_USER")) {
+        if (!userAuthorizationRepository.existsByAuthority("ROLE_USER")) {
             UserAuthorization userAuth2 = new UserAuthorization();
             userAuth2.setAuthority("ROLE_USER");
             userAuth2.setUserEntity(userEntity);
             userEntity.getUserAuthorization().add(userAuthorizationRepository.save(userAuth2));
+        } else {
+            userEntity.getUserAuthorization().add(userAuthorizationRepository.findByAuthority("ROLE_USER").get());
         }
-
 
         userRepository.save(userEntity);
 

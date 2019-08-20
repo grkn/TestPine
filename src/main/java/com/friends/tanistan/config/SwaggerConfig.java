@@ -3,7 +3,7 @@ package com.friends.tanistan.config;
 import com.friends.tanistan.tobedeleted.InitializeUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.AuthorizationCodeGrantBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Collections;
 
+@Profile("dev")
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -45,7 +46,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+                .apis(RequestHandlerSelectors.basePackage("com.friends.tanistan.controller"))
                 .paths(PathSelectors.ant("/tanistan/*"))
                 .build()
                 .securitySchemes(Collections.singletonList(securityScheme()))
@@ -64,9 +65,10 @@ public class SwaggerConfig {
 
     private SecurityScheme securityScheme() {
         GrantType grantType = new AuthorizationCodeGrantBuilder()
-                .tokenEndpoint(new TokenEndpoint("oauth/token", "oauthtoken"))
+                .tokenEndpoint(new TokenEndpoint("http://localhost:8082/oauth/token", "oauthtoken"))
                 .tokenRequestEndpoint(
-                        new TokenRequestEndpoint("oauth/authorize", SWAGGER_CLIENT_ID, SWAGGER_CLIENT_SCREET))
+                        new TokenRequestEndpoint("http://localhost:8082/oauth/authorize", SWAGGER_CLIENT_ID,
+                                SWAGGER_CLIENT_SCREET))
                 .build();
 
         AuthorizationScope[] scopes = {

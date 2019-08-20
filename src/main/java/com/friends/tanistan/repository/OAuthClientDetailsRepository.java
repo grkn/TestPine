@@ -8,4 +8,7 @@ public interface OAuthClientDetailsRepository {
             long refreshTokenValiditySeconds);
 
     void updateAuthorities(List<String> authorities, String clientId);
+
+    void updateClientIdAndClientSecret(String clientId, String clientSecret, String oldEmailAddress,
+            boolean isEncodable);
 }

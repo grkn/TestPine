@@ -66,11 +66,14 @@ public class UserService<T extends UserEntity> extends BaseService {
                 .message(String.format("User can not be found by given id : %s", id)).build("")));
     }
 
+    @Transactional
     public UserEntity updateUser(String id, UserEntity user) {
         UserEntity userEntity = getUserById(id);
+        updateClientIdAndClientSecret(user, userEntity);
         overrideVariables(user, userEntity);
         return userRepository.save(userEntity);
     }
+
 
     @Transactional
     public UserEntity givePermissionToUser(String userId, List<UserAuthorization> userAuthorizations) {
@@ -146,8 +149,11 @@ public class UserService<T extends UserEntity> extends BaseService {
         if (user.getLoginAttempt() != null) {
             userEntity.setLoginAttempt(user.getLoginAttempt());
         }
-        if (userEntity.getAccountPhrase() != null) {
-            userEntity.setAccountPhrase(passwordEncoder.encode(userEntity.getAccountPhrase()));
+        if (user.getAccountPhrase() != null) {
+            userEntity.setAccountPhrase(passwordEncoder.encode(user.getAccountPhrase()));
+        }
+        if (user.getAccountName() != null) {
+            userEntity.setAccountName(user.getAccountName());
         }
     }
 
@@ -163,7 +169,23 @@ public class UserService<T extends UserEntity> extends BaseService {
     private void setAccessToken(UserEntity userEntity, String password) {
         // 30 days to refreshToken, 15 min to accessToken
         oAuthClientDetailsRepository
-                .insertAccessToken(userEntity.getEmailAddress(), password, DEFAULT_AUTH, 900, 2592000);
+                .insertAccessToken(StringUtils.isEmpty(userEntity.getAccountName()) ? userEntity.getEmailAddress()
+                        : userEntity.getAccountName(), password, DEFAULT_AUTH, 900, 2592000);
+    }
+
+    private void updateClientIdAndClientSecret(UserEntity user, UserEntity userEntity) {
+        String oldEmailAddress = userEntity.getEmailAddress();
+
+        String clientId = userEntity.getEmailAddress();
+        String clientSecret = userEntity.getAccountPhrase();
+        if (!StringUtils.isEmpty(user.getEmailAddress())) {
+            clientId = user.getEmailAddress();
+        }
+        if (!StringUtils.isEmpty(user.getAccountPhrase())) {
+            clientSecret = user.getAccountPhrase();
+        }
+
+        oAuthClientDetailsRepository.updateClientIdAndClientSecret(clientId, clientSecret, oldEmailAddress, false);
     }
 
 }
