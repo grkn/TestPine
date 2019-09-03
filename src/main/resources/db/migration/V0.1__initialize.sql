@@ -40,4 +40,5 @@ create table oauth_code (
 	code VARCHAR(255), authentication bytea
 );
 
-
+-- Create root folder
+-- insert into test_suite (id, created_by, created_date, modified_by, modified_date, name, parent_id) VALUES ('0','anyUser',CURRENT_TIMESTAMP, 'anyUser',CURRENT_TIMESTAMP,'Root',null);
