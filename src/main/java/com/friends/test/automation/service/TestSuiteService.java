@@ -147,4 +147,8 @@ public class TestSuiteService extends BaseService {
             }
         }
     }
+
+    public Integer getTotalTestSuites(String projectId) {
+        return testSuiteRepository.countByTestProjectId(projectId);
+    }
 }

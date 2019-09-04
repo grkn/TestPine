@@ -17,4 +17,6 @@ public interface TestCaseRepository extends BaseTanistanJpaRepository<TestCase> 
             String suiteId, String projectId);
 
     Optional<TestCase> findByIdAndTestProjectId(String id, String projectId);
+
+    Long countByTestProjectId(String projectId);
 }

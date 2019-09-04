@@ -68,7 +68,11 @@ public class TestCaseService {
     }
 
     public TestCase findById(String projectId, String id) {
-        return testCaseRepository.findByIdAndTestProjectId(id,projectId).orElseThrow(() -> new NotFoundException(
+        return testCaseRepository.findByIdAndTestProjectId(id, projectId).orElseThrow(() -> new NotFoundException(
                 ErrorResource.ErrorContent.builder().message("Test case can not be found right now.").build("")));
+    }
+
+    public Integer getTotalTestCases(String projectId) {
+        return testCaseRepository.countByTestProjectId(projectId).intValue();
     }
 }
