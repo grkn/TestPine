@@ -124,7 +124,8 @@ public class CommandRunner implements Runnable {
     }
 
     private DefaultResource navigate(String sessionId, RunnableResource resource) {
-        DefaultResource defaultResource;NavigateDto navigateDto = new NavigateDto();
+        DefaultResource defaultResource;
+        NavigateDto navigateDto = new NavigateDto();
         navigateDto.setUrl(resource.getNavigateUrl());
         defaultResource = driverService.navigate(sessionId, navigateDto).getBody();
         return defaultResource;

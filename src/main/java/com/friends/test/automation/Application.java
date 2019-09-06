@@ -10,7 +10,6 @@ import java.io.IOException;
 @SpringBootApplication
 @PropertySources(value = {@PropertySource(value = "application.properties"),
         @PropertySource(value = "application-persistent.properties")})
-// @RequiredArgsConstructor
 public class Application {
 
     public static void main(String[] args) throws IOException {

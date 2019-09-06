@@ -3,6 +3,8 @@ package com.friends.test.automation.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.friends.test.automation.controller.converter.DriverDtoToDriver;
+import com.friends.test.automation.controller.converter.DriverToDriverResource;
 import com.friends.test.automation.controller.converter.TestCaseDtoToTestCase;
 import com.friends.test.automation.controller.converter.TestCaseInstanceRunnerToInstanceRunnerResource;
 import com.friends.test.automation.controller.converter.TestCaseStepToStepResource;
@@ -57,6 +59,8 @@ public class GlobalConfig {
                         new TestCaseDtoToTestCase()));
         conversionService.addConverter(new TestProjectToTestProjectResource(new TestCaseToTestCaseResource(),
                 new TestSuiteToTestSuiteResource(new TestCaseToTestCaseResource()), new UserToUserResourceConverter()));
+        conversionService.addConverter(new DriverToDriverResource());
+        conversionService.addConverter(new DriverDtoToDriver());
         return conversionService;
     }
 

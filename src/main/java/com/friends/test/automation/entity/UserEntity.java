@@ -69,6 +69,9 @@ public class UserEntity extends TanistanBaseEntity<String> {
     @ManyToOne(fetch = FetchType.EAGER)
     private Company company;
 
+    @OneToMany(mappedBy = "userEntity")
+    private Set<Driver> driver;
+
     public UserEntity() {
         super();
     }
@@ -216,5 +219,13 @@ public class UserEntity extends TanistanBaseEntity<String> {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Set<Driver> getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Set<Driver> driver) {
+        this.driver = driver;
     }
 }
