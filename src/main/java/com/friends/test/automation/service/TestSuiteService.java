@@ -8,6 +8,7 @@ import com.friends.test.automation.entity.TestProject;
 import com.friends.test.automation.entity.TestSuite;
 import com.friends.test.automation.entity.UserEntity;
 import com.friends.test.automation.exception.NotFoundException;
+import com.friends.test.automation.repository.DriverRepository;
 import com.friends.test.automation.repository.TestCaseInstanceRunnerRepository;
 import com.friends.test.automation.repository.TestCaseRepository;
 import com.friends.test.automation.repository.TestProjectRepository;
@@ -34,6 +35,7 @@ public class TestSuiteService extends BaseService {
     private final ObjectMapper objectMapper;
     private final UserService<UserEntity> userService;
     private final TestProjectRepository testProjectRepository;
+    private final DriverRepository driverRepository;
 
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 20,
             0L, TimeUnit.MILLISECONDS,
@@ -44,7 +46,8 @@ public class TestSuiteService extends BaseService {
             TestCaseInstanceRunnerRepository testCaseInstanceRunnerRepository,
             TestStepRepository testStepRepository, ObjectMapper objectMapper,
             UserService<UserEntity> userService,
-            TestProjectRepository testProjectRepository) {
+            TestProjectRepository testProjectRepository,
+            DriverRepository driverRepository) {
         this.testSuiteRepository = testSuiteRepository;
         this.testCaseRepository = testCaseRepository;
         this.driverService = driverService;
@@ -53,6 +56,7 @@ public class TestSuiteService extends BaseService {
         this.objectMapper = objectMapper;
         this.userService = userService;
         this.testProjectRepository = testProjectRepository;
+        this.driverRepository = driverRepository;
     }
 
     public TestSuite createTestSuite(TestSuite testSuite, String projectId) {
@@ -133,17 +137,19 @@ public class TestSuiteService extends BaseService {
         testSuiteRepository.saveAndFlush(testSuite);
     }
 
-    public void runTestCase(String suiteId, String projectId) {
+    public void runTestCase(String suiteId, String projectId, String driverId) {
         Set<TestCase> testCases = testSuiteRepository.findByIdAndTestProjectId(suiteId, projectId)
                 .orElseThrow(() -> new NotFoundException(
                         ErrorResource.ErrorContent.builder()
                                 .message("TestSuite can not be found so can not run test cases")
                                 .build(""))).getTestCases();
+
         for (TestCase testCase : testCases) {
             if (testCase.getUserEntity().getEmailAddress().equals(getCurrentUser()) || testCase.getUserEntity()
                     .getAccountName().equals(getCurrentUser())) {
                 threadPoolExecutor.submit(new CommandRunner(objectMapper, driverService, testCase,
-                        testCaseInstanceRunnerRepository, testStepRepository));
+                        testCaseInstanceRunnerRepository, testStepRepository,
+                        driverRepository.findById(driverId).get()));
             }
         }
     }

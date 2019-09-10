@@ -29,8 +29,8 @@ public class UserDriverService {
                 ErrorResource.ErrorContent.builder().message("Driver can not be found").build("")));
     }
 
-    public List<Driver> findAll() {
-        return driverRepository.findAll();
+    public List<Driver> findAll(String userId) {
+        return driverRepository.findAllByUserEntityId(userId);
     }
 
     @Transactional

@@ -104,9 +104,10 @@ public class TestSuiteController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/project/{projectId}/{suiteId}/testcase/run")
-    public ResponseEntity<Void> runTestCases(@PathVariable String projectId, @PathVariable String suiteId) {
-        testSuiteService.runTestCase(suiteId, projectId);
+    @PatchMapping("/project/{projectId}/suite/{suiteId}/testcase/run/driver/{driverId}")
+    public ResponseEntity<Void> runTestCases(@PathVariable String projectId, @PathVariable String suiteId
+            , @PathVariable String driverId) {
+        testSuiteService.runTestCase(suiteId, projectId,driverId);
         return ResponseEntity.noContent().build();
     }
 }

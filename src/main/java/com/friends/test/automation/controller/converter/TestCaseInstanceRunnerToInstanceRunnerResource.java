@@ -11,10 +11,13 @@ public class TestCaseInstanceRunnerToInstanceRunnerResource implements
         Converter<TestCaseInstanceRunner, InstanceRunnerResource> {
 
     private final TestCaseStepToStepResource testCaseStepToStepResource;
+    private final TestCaseToTestCaseResource testCaseToTestCaseResource;
 
     public TestCaseInstanceRunnerToInstanceRunnerResource(
-            TestCaseStepToStepResource testCaseStepToStepResource) {
+            TestCaseStepToStepResource testCaseStepToStepResource,
+            TestCaseToTestCaseResource testCaseToTestCaseResource) {
         this.testCaseStepToStepResource = testCaseStepToStepResource;
+        this.testCaseToTestCaseResource = testCaseToTestCaseResource;
     }
 
     @Override
@@ -22,6 +25,7 @@ public class TestCaseInstanceRunnerToInstanceRunnerResource implements
         InstanceRunnerResource instanceRunnerResource = new InstanceRunnerResource();
         if (source.getTestCase() != null) {
             instanceRunnerResource.setTestCaseName(source.getTestCase().getName());
+            instanceRunnerResource.setTestCaseResource(testCaseToTestCaseResource.convert(source.getTestCase()));
         }
         instanceRunnerResource.setFisinedDate(source.getModifiedDate());
         instanceRunnerResource.setId(source.getId());

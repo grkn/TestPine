@@ -7,6 +7,7 @@ import com.friends.test.automation.entity.TestProject;
 import com.friends.test.automation.entity.UserEntity;
 import com.friends.test.automation.exception.AlreadyExistsException;
 import com.friends.test.automation.exception.NotFoundException;
+import com.friends.test.automation.repository.DriverRepository;
 import com.friends.test.automation.repository.TestCaseInstanceRunnerRepository;
 import com.friends.test.automation.repository.TestCaseRepository;
 import com.friends.test.automation.repository.TestProjectRepository;
@@ -21,23 +22,32 @@ public class TestCaseService {
     private final UserService<UserEntity> userService;
     private final TestCaseInstanceRunnerRepository testCaseInstanceRunnerRepository;
     private final TestProjectRepository testProjectRepository;
+    private final DriverRepository driverRepository;
 
     public TestCaseService(TestCaseRepository testCaseRepository,
             UserService<UserEntity> userService,
             TestCaseInstanceRunnerRepository testCaseInstanceRunnerRepository,
-            TestProjectRepository testProjectRepository) {
+            TestProjectRepository testProjectRepository,
+            DriverRepository driverRepository) {
         this.testCaseRepository = testCaseRepository;
         this.userService = userService;
         this.testCaseInstanceRunnerRepository = testCaseInstanceRunnerRepository;
         this.testProjectRepository = testProjectRepository;
+        this.driverRepository = driverRepository;
     }
 
     public TestCase save(String projectId, String userId, TestCase testCase) {
         testCase.setUserEntity(userService.getUserById(userId));
         testCase.setTestProject(getProjectById(projectId));
+
+        if (testCase.getDriver() != null) {
+            testCase.setDriver(driverRepository.findById(testCase.getDriver().getId()).get());
+            testCase.getDriver().setTestCase(testCase);
+        }
         if (testCase.getId() == null) {
             checkTestCaseExistWithSameName(testCase.getName());
         }
+
         return this.testCaseRepository.save(testCase);
     }
 
@@ -65,6 +75,15 @@ public class TestCaseService {
             Pageable pageable) {
         return testCaseInstanceRunnerRepository
                 .findAllByTestCaseIdAndTestCaseTestProjectId(testCaseId, projectId, pageable);
+    }
+
+    public Page<TestCaseInstanceRunner> findAllInstanceRunnersForProject(String projectId, Pageable pageable) {
+        return testCaseInstanceRunnerRepository.findAllByTestCaseTestProjectId(projectId, pageable);
+    }
+
+    public TestCaseInstanceRunner findById(String id){
+        return testCaseInstanceRunnerRepository.findById(id).orElseThrow(() -> new NotFoundException(
+                ErrorResource.ErrorContent.builder().message("Test result can not be found").build("")));
     }
 
     public TestCase findById(String projectId, String id) {

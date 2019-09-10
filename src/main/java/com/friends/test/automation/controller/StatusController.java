@@ -20,6 +20,6 @@ public class StatusController {
 
     @GetMapping
     public ResponseEntity<StatusResource> getStatus() {
-        return driverService.getStatus();
+        return driverService.getStatus(null);
     }
 }

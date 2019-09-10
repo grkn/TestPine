@@ -2,11 +2,13 @@ package com.friends.test.automation.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +36,9 @@ public class TestCase extends TanistanBaseEntity<String> {
 
     @ManyToOne
     private TestProject testProject;
+
+    @OneToOne(mappedBy = "testCase", fetch = FetchType.EAGER)
+    private Driver driver;
 
     public TestCase() {
 
@@ -86,5 +91,13 @@ public class TestCase extends TanistanBaseEntity<String> {
 
     public void setTestProject(TestProject testProject) {
         this.testProject = testProject;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 }

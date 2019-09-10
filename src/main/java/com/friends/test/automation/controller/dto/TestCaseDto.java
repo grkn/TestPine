@@ -7,6 +7,7 @@ public class TestCaseDto {
     private String id;
     private JsonNode testCommands;
     private String name;
+    private DriverDto driver;
 
     public String getName() {
         return name;
@@ -30,5 +31,13 @@ public class TestCaseDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public DriverDto getDriver() {
+        return driver;
+    }
+
+    public void setDriver(DriverDto driver) {
+        this.driver = driver;
     }
 }

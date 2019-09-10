@@ -52,7 +52,8 @@ public class GlobalConfig {
         conversionService.addConverter(new TestSuiteToTestSuiteResource(new TestCaseToTestCaseResource()));
         conversionService.addConverter(new TestCaseStepToStepResource());
         conversionService
-                .addConverter(new TestCaseInstanceRunnerToInstanceRunnerResource(new TestCaseStepToStepResource()));
+                .addConverter(new TestCaseInstanceRunnerToInstanceRunnerResource(new TestCaseStepToStepResource(),
+                        new TestCaseToTestCaseResource()));
         conversionService.addConverter(
                 new TestProjectDtoToTestProject(new UserDtoToUserEntityConverter(),
                         new TestSuiteDtoToTestSuite(new TestCaseDtoToTestCase()),

@@ -1,6 +1,7 @@
 package com.friends.test.automation.controller.resource;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.friends.test.automation.entity.Driver;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ public class TestCaseResource {
     private JsonNode testCommands;
     private String userId;
     private List<String> testSuiteNames;
+    private DriverResource driver;
 
     public String getId() {
         return id;
@@ -60,5 +62,13 @@ public class TestCaseResource {
 
     public void setTestSuiteNames(List<String> testSuiteNames) {
         this.testSuiteNames = testSuiteNames;
+    }
+
+    public DriverResource getDriver() {
+        return driver;
+    }
+
+    public void setDriver(DriverResource driver) {
+        this.driver = driver;
     }
 }

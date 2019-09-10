@@ -1,13 +1,13 @@
 package com.friends.test.automation.controller;
 
-import com.friends.test.automation.controller.resource.DefaultResource;
-import com.friends.test.automation.controller.resource.DeleteSessionResource;
 import com.friends.test.automation.controller.dto.FindElementDto;
 import com.friends.test.automation.controller.dto.NavigateDto;
 import com.friends.test.automation.controller.dto.SendKeysDto;
 import com.friends.test.automation.controller.dto.SessionDto;
-import com.friends.test.automation.controller.resource.SessionResource;
 import com.friends.test.automation.controller.dto.TimeoutDto;
+import com.friends.test.automation.controller.resource.DefaultResource;
+import com.friends.test.automation.controller.resource.DeleteSessionResource;
+import com.friends.test.automation.controller.resource.SessionResource;
 import com.friends.test.automation.service.DriverService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,74 +31,74 @@ public class SessionController {
 
     @PostMapping
     public ResponseEntity<SessionResource> getSession(@RequestBody SessionDto sessionDto) {
-        return driverService.getSession(sessionDto);
+        return driverService.getSession(sessionDto, null);
     }
 
     @DeleteMapping("/{sessionId}")
     public ResponseEntity<DeleteSessionResource> deleteSession(@PathVariable String sessionId) {
-        return driverService.deleteSession(sessionId);
+        return driverService.deleteSession(sessionId, null);
     }
 
     @PostMapping("/{sessionId}/timeouts")
     public ResponseEntity<DefaultResource> setTimeout(@PathVariable String sessionId,
             @RequestBody TimeoutDto timeoutDto) {
-        return driverService.setTimeout(sessionId, timeoutDto);
+        return driverService.setTimeout(sessionId, timeoutDto, null);
     }
 
     @PostMapping("/{sessionId}/url")
     public ResponseEntity<DefaultResource> setTimeout(@PathVariable String sessionId,
             @RequestBody NavigateDto navigateDto) {
-        return driverService.navigate(sessionId, navigateDto);
+        return driverService.navigate(sessionId, navigateDto, null);
     }
 
     @GetMapping("/{sessionId}/url")
     public ResponseEntity<DefaultResource> setTimeout(@PathVariable String sessionId) {
-        return driverService.getCurrentUrl(sessionId);
+        return driverService.getCurrentUrl(sessionId, null);
     }
 
     @GetMapping("/{sessionId}/title")
     public ResponseEntity<DefaultResource> getPageTitle(@PathVariable String sessionId) {
-        return driverService.getPageTitle(sessionId);
+        return driverService.getPageTitle(sessionId, null);
     }
 
     @PostMapping("/{sessionId}/window/current/maximize")
     public ResponseEntity<DefaultResource> maximize(@PathVariable String sessionId) {
-        return driverService.maximize(sessionId);
+        return driverService.maximize(sessionId, null);
     }
 
     @PostMapping("/{sessionId}/element")
     public ResponseEntity<DefaultResource> findElement(@PathVariable String sessionId,
             @RequestBody FindElementDto findElementDto) {
-        return driverService.findElement(sessionId, findElementDto);
+        return driverService.findElement(sessionId, findElementDto, null);
     }
 
     @GetMapping("/{sessionId}/element/{elementId}/selected")
     public ResponseEntity<DefaultResource> selected(@PathVariable("sessionId") String sessionId,
             @PathVariable("elementId") String elementId) {
-        return driverService.isSelectedElement(sessionId, elementId);
+        return driverService.isSelectedElement(sessionId, elementId, null);
     }
 
     @GetMapping("/{sessionId}/element/{elementId}/attribute/{name}")
     public ResponseEntity<DefaultResource> getAttributeByName(@PathVariable("sessionId") String sessionId,
             @PathVariable("elementId") String elementId, @PathVariable("name") String name) {
-        return driverService.getAttributeByName(sessionId, elementId, name);
+        return driverService.getAttributeByName(sessionId, elementId, name, null);
     }
 
     @GetMapping("/{sessionId}/element/{elementId}/text")
     public ResponseEntity<DefaultResource> getElementText(@PathVariable("sessionId") String sessionId,
             @PathVariable("elementId") String elementId) {
-        return driverService.getElementText(sessionId, elementId);
+        return driverService.getElementText(sessionId, elementId, null);
     }
 
     @PostMapping("/{sessionId}/element/{elementId}/click")
     public ResponseEntity<DefaultResource> clickElement(@PathVariable("sessionId") String sessionId,
             @PathVariable("elementId") String elementId) {
-        return driverService.clickElement(sessionId, elementId);
+        return driverService.clickElement(sessionId, elementId, null);
     }
 
     @PostMapping("/{sessionId}/element/{elementId}/value")
     public ResponseEntity<DefaultResource> sendKeys(@PathVariable("sessionId") String sessionId,
             @PathVariable("elementId") String elementId, @RequestBody SendKeysDto sendKeysDto) {
-        return driverService.sendKeys(sessionId, elementId, sendKeysDto);
+        return driverService.sendKeys(sessionId, elementId, sendKeysDto, null);
     }
 }

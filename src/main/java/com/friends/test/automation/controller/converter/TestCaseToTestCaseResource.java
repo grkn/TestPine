@@ -2,8 +2,9 @@ package com.friends.test.automation.controller.converter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.friends.test.automation.controller.resource.TestCaseResource;
+import com.friends.test.automation.controller.resource.DriverResource;
 import com.friends.test.automation.controller.resource.ErrorResource;
+import com.friends.test.automation.controller.resource.TestCaseResource;
 import com.friends.test.automation.entity.TestCase;
 import com.friends.test.automation.entity.TestSuite;
 import com.friends.test.automation.exception.BadRequestException;
@@ -40,6 +41,15 @@ public class TestCaseToTestCaseResource implements Converter<TestCase, TestCaseR
                             .message("Test Commands as string can not be converted to JsonNode")
                             .build(""));
         }
+
+        if (source.getDriver() != null) {
+            DriverResource driverResource = new DriverResource();
+            driverResource.setId(source.getDriver().getId());
+            driverResource.setPort(source.getDriver().getPort());
+            driverResource.setAddress(source.getDriver().getAddress());
+            testCaseResource.setDriver(driverResource);
+        }
+
         return testCaseResource;
     }
 }

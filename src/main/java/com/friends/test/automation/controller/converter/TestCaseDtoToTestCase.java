@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.friends.test.automation.controller.dto.TestCaseDto;
 import com.friends.test.automation.controller.resource.ErrorResource;
+import com.friends.test.automation.entity.Driver;
 import com.friends.test.automation.entity.TestCase;
 import com.friends.test.automation.exception.BadRequestException;
 import org.slf4j.Logger;
@@ -22,6 +23,13 @@ public class TestCaseDtoToTestCase implements Converter<TestCaseDto, TestCase> {
             testCase.setTestCommands(objectMapper.writeValueAsString(source.getTestCommands()));
             testCase.setName(source.getName());
             testCase.setId(source.getId());
+            if (source.getDriver() != null) {
+                Driver driver = new Driver();
+                driver.setPort(source.getDriver().getPort());
+                driver.setAddress(source.getDriver().getAddress());
+                driver.setId(source.getDriver().getId());
+                testCase.setDriver(driver);
+            }
         } catch (JsonProcessingException e) {
             logger.error("Test Commands can not be converted to String");
             throw new BadRequestException(

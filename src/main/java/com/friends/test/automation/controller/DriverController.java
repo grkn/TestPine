@@ -52,9 +52,9 @@ public class DriverController {
                 .ok(conversionService.convert(userDriverService.createOrUpdate(driver, userId), DriverResource.class));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<DriverResource>> createDriver() {
-        List<Driver> drivers = userDriverService.findAll();
+    @GetMapping("/user/{userId}/all")
+    public ResponseEntity<List<DriverResource>> getAll(@PathVariable String userId) {
+        List<Driver> drivers = userDriverService.findAll(userId);
         List<DriverResource> driverResources = drivers.stream()
                 .map(item -> conversionService.convert(item, DriverResource.class)).collect(Collectors.toList());
         return ResponseEntity.ok(driverResources);

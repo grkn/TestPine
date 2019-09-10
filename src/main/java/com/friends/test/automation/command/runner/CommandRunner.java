@@ -9,6 +9,7 @@ import com.friends.test.automation.controller.dto.SessionDto;
 import com.friends.test.automation.controller.resource.DefaultResource;
 import com.friends.test.automation.controller.resource.RunnableResource;
 import com.friends.test.automation.controller.resource.SessionResource;
+import com.friends.test.automation.entity.Driver;
 import com.friends.test.automation.entity.TestCase;
 import com.friends.test.automation.entity.TestCaseInstanceRunner;
 import com.friends.test.automation.entity.TestStep;
@@ -33,17 +34,22 @@ public class CommandRunner implements Runnable {
     private final TestCase testCase;
     private final TestCaseInstanceRunnerRepository testCaseInstanceRunnerRepository;
     private final TestStepRepository testStepRepository;
+    private final Driver driver;
 
     public CommandRunner(ObjectMapper objectMapper, DriverService driverService,
             TestCase testCase, TestCaseInstanceRunnerRepository testCaseInstanceRunnerRepository,
-            TestStepRepository testStepRepository) {
+            TestStepRepository testStepRepository, Driver driver) {
         this.objectMapper = objectMapper;
         this.driverService = driverService;
         this.testCase = testCase;
         this.testCaseInstanceRunnerRepository = testCaseInstanceRunnerRepository;
         this.testStepRepository = testStepRepository;
+        this.driver = driver;
     }
 
+    private String createDriverUrl() {
+        return driver != null ? driver.getAddress() + ":" + driver.getPort() : null;
+    }
 
     @Override
     public void run() {
@@ -55,7 +61,8 @@ public class CommandRunner implements Runnable {
 
         SessionDto sessionDto = new SessionDto();
         sessionDto.setDesiredCapabilities(new SessionDto.DesiredCapabilities());
-        ResponseEntity<SessionResource> sessionResource = driverService.getSession(sessionDto);
+        ResponseEntity<SessionResource> sessionResource = driverService
+                .getSession(sessionDto, createDriverUrl());
         if (sessionResource.getBody() != null) {
             String sessionId = sessionResource.getBody().getSessionId();
 
@@ -104,7 +111,7 @@ public class CommandRunner implements Runnable {
             } catch (RuntimeException ex) {
                 logger.error("Unexpected Error @CommandRunner", ex);
             } finally {
-                driverService.deleteSession(sessionId);
+                driverService.deleteSession(sessionId, createDriverUrl());
                 testCaseInstanceRunner.setRunning(false);
                 testCaseInstanceRunnerRepository.saveAndFlush(testCaseInstanceRunner);
             }
@@ -127,7 +134,7 @@ public class CommandRunner implements Runnable {
         DefaultResource defaultResource;
         NavigateDto navigateDto = new NavigateDto();
         navigateDto.setUrl(resource.getNavigateUrl());
-        defaultResource = driverService.navigate(sessionId, navigateDto).getBody();
+        defaultResource = driverService.navigate(sessionId, navigateDto, createDriverUrl()).getBody();
         return defaultResource;
     }
 
@@ -135,7 +142,8 @@ public class CommandRunner implements Runnable {
         DefaultResource defaultResource = findElement(sessionId, resource);
         if (defaultResource != null && defaultResource.getStatus() != 0) {
             defaultResource = driverService
-                    .clickElement(sessionId, defaultResource.getValue().get("ELEMENT").textValue()).
+                    .clickElement(sessionId, defaultResource.getValue().get("ELEMENT").textValue(),
+                            createDriverUrl()).
                             getBody();
         }
         return defaultResource;
@@ -146,7 +154,7 @@ public class CommandRunner implements Runnable {
         FindElementDto findElementDto = new FindElementDto();
         findElementDto.setUsing(resource.getSelectionType());
         findElementDto.setValue(resource.getSelectionValue());
-        defaultResource = driverService.findElement(sessionId, findElementDto).getBody();
+        defaultResource = driverService.findElement(sessionId, findElementDto, createDriverUrl()).getBody();
         return defaultResource;
     }
 
@@ -157,7 +165,7 @@ public class CommandRunner implements Runnable {
             sendKeysDto.setValue(Lists.newArrayList(resource.getMessage()));
             defaultResource = driverService
                     .sendKeys(sessionId, defaultResource.getValue().get("ELEMENT").textValue(),
-                            sendKeysDto)
+                            sendKeysDto, createDriverUrl())
                     .getBody();
         }
         return defaultResource;
