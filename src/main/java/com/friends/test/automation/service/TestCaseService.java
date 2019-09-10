@@ -84,7 +84,7 @@ public class TestCaseService {
             return testCaseInstanceRunnerRepository.findAllByTestCaseTestProjectId(projectId, pageable);
         } else {
             return testCaseInstanceRunnerRepository
-                    .findAllByTestCaseTestProjectIdAndTestCaseTestSuiteName(projectId, suiteName, pageable);
+                    .findAllByTestCaseTestProjectIdAndTestCaseTestSuiteNameIgnoreCaseContains(projectId, suiteName, pageable);
         }
     }
 
