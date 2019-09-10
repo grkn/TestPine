@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -35,9 +36,10 @@ public class TestResultController {
     @GetMapping("/all")
     public ResponseEntity<Page<InstanceRunnerResource>> findAllTestCaseRunnersUnderProject(
             @PathVariable String projectId,
+            @RequestParam(required = false) String suiteName,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<TestCaseInstanceRunner> testModelPage = this.testCaseService
-                .findAllInstanceRunnersForProject(projectId, pageable);
+                .findAllInstanceRunnersForProject(suiteName, projectId, pageable);
         List<InstanceRunnerResource> instanceRunnerResources = testModelPage.get()
                 .map(testCaseInstanceRunner -> conversionService
                         .convert(testCaseInstanceRunner, InstanceRunnerResource.class)).collect(

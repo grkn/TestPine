@@ -11,4 +11,7 @@ public interface TestCaseInstanceRunnerRepository extends BaseTanistanJpaReposit
 
     Page<TestCaseInstanceRunner> findAllByTestCaseTestProjectId(String projectId, Pageable pageable);
 
+    Page<TestCaseInstanceRunner> findAllByTestCaseTestProjectIdAndTestCaseTestSuiteName(String projectId,
+            String suiteName, Pageable pageable);
+
 }

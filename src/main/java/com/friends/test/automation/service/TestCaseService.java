@@ -14,6 +14,7 @@ import com.friends.test.automation.repository.TestProjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class TestCaseService {
@@ -77,11 +78,17 @@ public class TestCaseService {
                 .findAllByTestCaseIdAndTestCaseTestProjectId(testCaseId, projectId, pageable);
     }
 
-    public Page<TestCaseInstanceRunner> findAllInstanceRunnersForProject(String projectId, Pageable pageable) {
-        return testCaseInstanceRunnerRepository.findAllByTestCaseTestProjectId(projectId, pageable);
+    public Page<TestCaseInstanceRunner> findAllInstanceRunnersForProject(String suiteName, String projectId,
+            Pageable pageable) {
+        if (StringUtils.isEmpty(suiteName)) {
+            return testCaseInstanceRunnerRepository.findAllByTestCaseTestProjectId(projectId, pageable);
+        } else {
+            return testCaseInstanceRunnerRepository
+                    .findAllByTestCaseTestProjectIdAndTestCaseTestSuiteName(projectId, suiteName, pageable);
+        }
     }
 
-    public TestCaseInstanceRunner findById(String id){
+    public TestCaseInstanceRunner findById(String id) {
         return testCaseInstanceRunnerRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 ErrorResource.ErrorContent.builder().message("Test result can not be found").build("")));
     }
