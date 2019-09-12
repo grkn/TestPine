@@ -8,7 +8,8 @@ import javax.persistence.OneToOne;
 public class Driver extends TanistanBaseEntity<String> {
 
     private String address;
-    private Integer port;
+    private String name;
+    private boolean isEditable = true;
 
     @ManyToOne
     private UserEntity userEntity;
@@ -22,14 +23,6 @@ public class Driver extends TanistanBaseEntity<String> {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
     }
 
     public UserEntity getUserEntity() {
@@ -46,5 +39,21 @@ public class Driver extends TanistanBaseEntity<String> {
 
     public void setTestCase(TestCase testCase) {
         this.testCase = testCase;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isEditable() {
+        return isEditable;
+    }
+
+    public void setEditable(boolean editable) {
+        isEditable = editable;
     }
 }

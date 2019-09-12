@@ -58,7 +58,7 @@ public class CommandRunner implements Runnable {
     }
 
     private String createDriverUrl() {
-        return driver != null ? driver.getAddress() + ":" + driver.getPort() : null;
+        return driver != null ? driver.getAddress() : null;
     }
 
     @Override

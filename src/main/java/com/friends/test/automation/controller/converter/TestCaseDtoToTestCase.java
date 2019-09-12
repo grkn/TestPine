@@ -25,7 +25,7 @@ public class TestCaseDtoToTestCase implements Converter<TestCaseDto, TestCase> {
             testCase.setId(source.getId());
             if (source.getDriver() != null) {
                 Driver driver = new Driver();
-                driver.setPort(source.getDriver().getPort());
+                driver.setName(source.getDriver().getName());
                 driver.setAddress(source.getDriver().getAddress());
                 driver.setId(source.getDriver().getId());
                 testCase.setDriver(driver);

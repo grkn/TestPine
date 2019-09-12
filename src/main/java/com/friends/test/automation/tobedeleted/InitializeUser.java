@@ -3,6 +3,7 @@ package com.friends.test.automation.tobedeleted;
 import com.friends.test.automation.entity.TestSuite;
 import com.friends.test.automation.entity.UserAuthorization;
 import com.friends.test.automation.entity.UserEntity;
+import com.friends.test.automation.repository.DriverRepository;
 import com.friends.test.automation.repository.OAuthClientDetailsRepository;
 import com.friends.test.automation.repository.TestSuiteRepository;
 import com.friends.test.automation.repository.UserAuthorizationRepository;
@@ -50,6 +51,9 @@ public class InitializeUser {
 
     @Autowired
     private TestSuiteRepository testSuiteRepository;
+
+    @Autowired
+    private DriverRepository driverRepository;
 
     @Autowired
     private OAuthClientDetailsRepository clientDetailsRepository;

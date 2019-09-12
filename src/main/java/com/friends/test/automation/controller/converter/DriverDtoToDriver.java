@@ -10,7 +10,7 @@ public class DriverDtoToDriver implements Converter<DriverDto,Driver> {
     public Driver convert(DriverDto source) {
         Driver driver = new Driver();
         driver.setAddress(source.getAddress());
-        driver.setPort(source.getPort());
+        driver.setName(source.getName());
         driver.setId(source.getId());
         return driver;
     }

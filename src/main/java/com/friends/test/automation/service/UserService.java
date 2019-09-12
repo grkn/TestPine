@@ -2,11 +2,13 @@ package com.friends.test.automation.service;
 
 import com.friends.test.automation.controller.resource.ErrorResource;
 import com.friends.test.automation.entity.Company;
+import com.friends.test.automation.entity.Driver;
 import com.friends.test.automation.entity.UserAuthorization;
 import com.friends.test.automation.entity.UserEntity;
 import com.friends.test.automation.exception.AlreadyExistsException;
 import com.friends.test.automation.exception.NotFoundException;
 import com.friends.test.automation.repository.CompanyRepository;
+import com.friends.test.automation.repository.DriverRepository;
 import com.friends.test.automation.repository.OAuthClientDetailsRepository;
 import com.friends.test.automation.repository.UserAuthorizationRepository;
 import com.friends.test.automation.repository.UserRepository;
@@ -14,6 +16,7 @@ import com.friends.test.automation.util.SecurityUtil;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,20 +44,30 @@ public class UserService<T extends UserEntity> extends BaseService {
     private final OAuthClientDetailsRepository oAuthClientDetailsRepository;
     private static final String DEFAULT_AUTH = "ROLE_USER";
     private static final String ADMIN_AUTH = "ROLE_ADMIN";
+
     private final DefaultTokenServices defaultTokenServices;
+    private final DriverRepository driverRepository;
     private final CompanyRepository companyRepository;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    @Value("${testpine.driver.address}")
+    private String driverAddress;
+
+    @Value("${testpine.driver.name}")
+    private String driverName;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
             UserAuthorizationRepository userAuthorizationRepository,
             OAuthClientDetailsRepository oAuthClientDetailsRepository,
             DefaultTokenServices defaultTokenServices,
+            DriverRepository driverRepository,
             CompanyRepository companyRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userAuthorizationRepository = userAuthorizationRepository;
         this.oAuthClientDetailsRepository = oAuthClientDetailsRepository;
         this.defaultTokenServices = defaultTokenServices;
+        this.driverRepository = driverRepository;
         this.companyRepository = companyRepository;
     }
 
@@ -262,6 +275,15 @@ public class UserService<T extends UserEntity> extends BaseService {
         userEntity.setAccountPhrase(passwordEncoder.encode(password));
 
         userEntity = userRepository.save(userEntity);
+
+        Driver defaultDriver = new Driver();
+        defaultDriver.setName(driverName);
+        defaultDriver.setAddress(driverAddress);
+        defaultDriver.setEditable(false);
+        defaultDriver.setUserEntity(userEntity);
+        defaultDriver = driverRepository.save(defaultDriver);
+
+        userEntity.setDriver(Sets.newHashSet(defaultDriver));
 
         setDefaultAuthorization(userEntity, auth);
 

@@ -3,6 +3,7 @@ package com.friends.test.automation.service;
 import com.friends.test.automation.controller.resource.ErrorResource;
 import com.friends.test.automation.entity.Driver;
 import com.friends.test.automation.entity.UserEntity;
+import com.friends.test.automation.exception.BadRequestException;
 import com.friends.test.automation.exception.NotFoundException;
 import com.friends.test.automation.repository.DriverRepository;
 import com.google.common.collect.Sets;
@@ -36,11 +37,15 @@ public class UserDriverService {
     @Transactional
     public Driver createOrUpdate(Driver driver, String userId) {
         UserEntity userEntity = userService.getUserById(userId);
-        if (StringUtils.isEmpty(driver.getId() != null)) {
+        if (!StringUtils.isEmpty(driver.getId())) {
             Driver persistedDriver = findById(driver.getId());
+            if (!persistedDriver.isEditable()) {
+                throw new BadRequestException(
+                        ErrorResource.ErrorContent.builder().message("TestPine drivers can not be edited").build(""));
+            }
             if (driver.getAddress() != null) {
                 persistedDriver.setAddress(driver.getAddress());
-                persistedDriver.setPort(driver.getPort());
+                persistedDriver.setName(driver.getName());
             }
             persistedDriver.setUserEntity(userEntity);
             setDriverToUserEntity(userEntity, persistedDriver);

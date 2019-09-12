@@ -28,11 +28,8 @@ public class DriverService extends BaseService {
 
     private final RestTemplate restTemplate;
 
-    @Value("${chrome.driver.ip}")
-    private String driverIp;
-
-    @Value("${chrome.driver.port}")
-    private String port;
+    @Value("${testpine.driver.address}")
+    private String driverAddress;
 
     private static String DRIVER_URL;
 
@@ -42,7 +39,7 @@ public class DriverService extends BaseService {
 
     @PostConstruct
     public void setUp() {
-        DRIVER_URL = driverIp + ":" + port;
+        DRIVER_URL = driverAddress;
     }
 
     public ResponseEntity<SessionResource> getSession(SessionDto sessionDto, String driverUrl) {

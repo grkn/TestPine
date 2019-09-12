@@ -4,7 +4,7 @@ public class DriverResource {
 
     private String id;
     private String address;
-    private Integer port;
+    private String name;
 
     public String getId() {
         return id;
@@ -22,11 +22,11 @@ public class DriverResource {
         this.address = address;
     }
 
-    public Integer getPort() {
-        return port;
+    public String getName() {
+        return name;
     }
 
-    public void setPort(Integer port) {
-        this.port = port;
+    public void setName(String name) {
+        this.name = name;
     }
 }

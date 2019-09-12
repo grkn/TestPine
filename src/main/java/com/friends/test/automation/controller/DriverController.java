@@ -39,7 +39,7 @@ public class DriverController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DriverResource> createDriver(@PathVariable String id) {
+    public ResponseEntity<DriverResource> findDriverById(@PathVariable String id) {
         return ResponseEntity.ok(conversionService.convert(userDriverService.findById(id), DriverResource.class));
     }
 

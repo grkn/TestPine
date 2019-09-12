@@ -11,7 +11,7 @@ public class DriverToDriverResource implements Converter<Driver, DriverResource>
         DriverResource driverResource = new DriverResource();
         driverResource.setAddress(source.getAddress());
         driverResource.setId(source.getId());
-        driverResource.setPort(source.getPort());
+        driverResource.setName(source.getName());
         return driverResource;
     }
 }

@@ -47,7 +47,7 @@ public class TestCaseToTestCaseResource implements Converter<TestCase, TestCaseR
         if (source.getDriver() != null) {
             DriverResource driverResource = new DriverResource();
             driverResource.setId(source.getDriver().getId());
-            driverResource.setPort(source.getDriver().getPort());
+            driverResource.setName(source.getDriver().getName());
             driverResource.setAddress(source.getDriver().getAddress());
             testCaseResource.setDriver(driverResource);
         }

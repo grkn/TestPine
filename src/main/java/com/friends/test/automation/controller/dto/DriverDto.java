@@ -4,7 +4,7 @@ public class DriverDto {
 
     private String id;
     private String address;
-    private Integer port;
+    private String name;
     private String userId;
 
     public String getAddress() {
@@ -13,14 +13,6 @@ public class DriverDto {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
     }
 
     public String getId() {
@@ -37,5 +29,13 @@ public class DriverDto {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
