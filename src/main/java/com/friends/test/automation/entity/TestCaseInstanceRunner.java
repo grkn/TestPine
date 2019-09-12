@@ -20,6 +20,8 @@ public class TestCaseInstanceRunner extends TanistanBaseEntity<String> {
     @ManyToOne
     private UserEntity userEntity;
 
+    private String testSuiteInstanceRunnerId;
+
     public TestCaseInstanceRunner() {
 
     }
@@ -54,5 +56,13 @@ public class TestCaseInstanceRunner extends TanistanBaseEntity<String> {
 
     public void setTestCase(TestCase testCase) {
         this.testCase = testCase;
+    }
+
+    public String getTestSuiteInstanceRunnerId() {
+        return testSuiteInstanceRunnerId;
+    }
+
+    public void setTestSuiteInstanceRunnerId(String testSuiteInstanceRunnerId) {
+        this.testSuiteInstanceRunnerId = testSuiteInstanceRunnerId;
     }
 }

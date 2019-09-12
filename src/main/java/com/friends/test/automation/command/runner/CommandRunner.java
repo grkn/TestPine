@@ -13,8 +13,10 @@ import com.friends.test.automation.entity.Driver;
 import com.friends.test.automation.entity.TestCase;
 import com.friends.test.automation.entity.TestCaseInstanceRunner;
 import com.friends.test.automation.entity.TestStep;
+import com.friends.test.automation.entity.TestSuiteInstanceRunner;
 import com.friends.test.automation.repository.TestCaseInstanceRunnerRepository;
 import com.friends.test.automation.repository.TestStepRepository;
+import com.friends.test.automation.repository.TestSuiteInstanceRunnerRepository;
 import com.friends.test.automation.service.DriverService;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -33,18 +35,24 @@ public class CommandRunner implements Runnable {
     private final DriverService driverService;
     private final TestCase testCase;
     private final TestCaseInstanceRunnerRepository testCaseInstanceRunnerRepository;
+    private final TestSuiteInstanceRunnerRepository testSuiteInstanceRunnerRepository;
+    private final TestSuiteInstanceRunner testSuiteInstanceRunner;
     private final TestStepRepository testStepRepository;
     private final Driver driver;
 
     public CommandRunner(ObjectMapper objectMapper, DriverService driverService,
             TestCase testCase, TestCaseInstanceRunnerRepository testCaseInstanceRunnerRepository,
-            TestStepRepository testStepRepository, Driver driver) {
+            TestStepRepository testStepRepository, Driver driver,
+            TestSuiteInstanceRunnerRepository testSuiteInstanceRunnerRepository,
+            TestSuiteInstanceRunner testSuiteInstanceRunner) {
         this.objectMapper = objectMapper;
         this.driverService = driverService;
         this.testCase = testCase;
         this.testCaseInstanceRunnerRepository = testCaseInstanceRunnerRepository;
         this.testStepRepository = testStepRepository;
         this.driver = driver;
+        this.testSuiteInstanceRunnerRepository = testSuiteInstanceRunnerRepository;
+        this.testSuiteInstanceRunner = testSuiteInstanceRunner;
     }
 
     private String createDriverUrl() {
@@ -57,6 +65,7 @@ public class CommandRunner implements Runnable {
         testCaseInstanceRunner.setTestCase(testCase);
         testCaseInstanceRunner.setRunning(true);
         testCaseInstanceRunner.setUserEntity(testCase.getUserEntity());
+        testCaseInstanceRunner.setTestSuiteInstanceRunnerId(testSuiteInstanceRunner.getId());
         testCaseInstanceRunner = this.testCaseInstanceRunnerRepository.saveAndFlush(testCaseInstanceRunner);
 
         SessionDto sessionDto = new SessionDto();
@@ -113,6 +122,8 @@ public class CommandRunner implements Runnable {
             } finally {
                 driverService.deleteSession(sessionId, createDriverUrl());
                 testCaseInstanceRunner.setRunning(false);
+                testSuiteInstanceRunner.setEndDate(new Date());
+                testSuiteInstanceRunnerRepository.save(testSuiteInstanceRunner);
                 testCaseInstanceRunnerRepository.saveAndFlush(testCaseInstanceRunner);
             }
         }

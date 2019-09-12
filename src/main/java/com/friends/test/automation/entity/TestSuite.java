@@ -35,6 +35,9 @@ public class TestSuite extends TanistanBaseEntity<String> {
     @ManyToOne
     private TestProject testProject;
 
+    @OneToMany(mappedBy = "testSuite")
+    private Set<TestSuiteInstanceRunner> testSuiteInstanceRunners;
+
     public TestSuite() {
 
     }
@@ -85,5 +88,14 @@ public class TestSuite extends TanistanBaseEntity<String> {
 
     public void setTestProject(TestProject testProject) {
         this.testProject = testProject;
+    }
+
+    public Set<TestSuiteInstanceRunner> getTestSuiteInstanceRunners() {
+        return testSuiteInstanceRunners;
+    }
+
+    public void setTestSuiteInstanceRunners(
+            Set<TestSuiteInstanceRunner> testSuiteInstanceRunners) {
+        this.testSuiteInstanceRunners = testSuiteInstanceRunners;
     }
 }

@@ -14,7 +14,12 @@ public class TestCaseResource {
     private JsonNode testCommands;
     private String userId;
     private List<String> testSuiteNames;
+    private List<String> testSuiteIds;
     private DriverResource driver;
+    private List<InstanceRunnerResource> instanceRunnerResources;
+
+    public TestCaseResource() {
+    }
 
     public String getId() {
         return id;
@@ -70,5 +75,22 @@ public class TestCaseResource {
 
     public void setDriver(DriverResource driver) {
         this.driver = driver;
+    }
+
+    public List<InstanceRunnerResource> getInstanceRunnerResources() {
+        return instanceRunnerResources;
+    }
+
+    public void setInstanceRunnerResources(
+            List<InstanceRunnerResource> instanceRunnerResources) {
+        this.instanceRunnerResources = instanceRunnerResources;
+    }
+
+    public List<String> getTestSuiteIds() {
+        return testSuiteIds;
+    }
+
+    public void setTestSuiteIds(List<String> testSuiteIds) {
+        this.testSuiteIds = testSuiteIds;
     }
 }

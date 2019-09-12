@@ -31,6 +31,8 @@ public class TestCaseToTestCaseResource implements Converter<TestCase, TestCaseR
             testCaseResource
                     .setTestSuiteNames(
                             source.getTestSuite().stream().map(TestSuite::getName).collect(Collectors.toList()));
+            testCaseResource
+                    .setTestSuiteIds(source.getTestSuite().stream().map(TestSuite::getId).collect(Collectors.toList()));
         }
         try {
             testCaseResource.setTestCommands(objectMapper.readValue(source.getTestCommands(), JsonNode.class));

@@ -1,8 +1,11 @@
 package com.friends.test.automation.controller;
 
 import com.friends.test.automation.controller.resource.InstanceRunnerResource;
+import com.friends.test.automation.controller.resource.TestSuiteInstanceRunnerResource;
 import com.friends.test.automation.entity.TestCaseInstanceRunner;
+import com.friends.test.automation.entity.TestSuiteInstanceRunner;
 import com.friends.test.automation.service.TestCaseService;
+import com.friends.test.automation.service.TestSuiteService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,11 +29,13 @@ public class TestResultController {
 
     private final TestCaseService testCaseService;
     private final ConversionService conversionService;
+    private final TestSuiteService testSuiteService;
 
     public TestResultController(TestCaseService testCaseService,
-            ConversionService conversionService) {
+            ConversionService conversionService, TestSuiteService testSuiteService) {
         this.testCaseService = testCaseService;
         this.conversionService = conversionService;
+        this.testSuiteService = testSuiteService;
     }
 
     @GetMapping("/all")
@@ -51,5 +56,18 @@ public class TestResultController {
     public ResponseEntity<InstanceRunnerResource> findById(@PathVariable String id) {
         TestCaseInstanceRunner testCaseInstanceRunner = this.testCaseService.findById(id);
         return ResponseEntity.ok(conversionService.convert(testCaseInstanceRunner, InstanceRunnerResource.class));
+    }
+
+    @GetMapping("/suites")
+    public ResponseEntity<Page<TestSuiteInstanceRunnerResource>> findAllTestSuitesRunnersUnderProject(
+            @PathVariable String projectId,
+            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<TestSuiteInstanceRunner> testModelPage = this.testSuiteService
+                .findTestSuiteInstanceRunners(projectId, pageable);
+        List<TestSuiteInstanceRunnerResource> instanceRunnerResources = testModelPage.get()
+                .map(testSuiteInstanceRunner -> conversionService
+                        .convert(testSuiteInstanceRunner, TestSuiteInstanceRunnerResource.class)).collect(
+                        Collectors.toList());
+        return ResponseEntity.ok(new PageImpl(instanceRunnerResources, pageable, testModelPage.getTotalElements()));
     }
 }

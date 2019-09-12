@@ -7,7 +7,9 @@ import java.util.Optional;
 public interface TestSuiteRepository extends BaseTanistanJpaRepository<TestSuite> {
 
     Optional<TestSuite> findByIdAndTestProjectId(String id, String projectId);
+
     TestSuite findByParentIsNull();
 
     Integer countByTestProjectId(String projectId);
+
 }

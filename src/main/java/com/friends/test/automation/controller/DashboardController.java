@@ -27,7 +27,6 @@ public class DashboardController {
         return ResponseEntity.ok(testCaseService.getTotalTestCases(projectId));
     }
 
-
     @GetMapping("/project/{projectId}/testsuitecount")
     public ResponseEntity<Integer> getTotalTestSuites(@PathVariable String projectId) {
         return ResponseEntity.ok(testSuiteService.getTotalTestSuites(projectId));

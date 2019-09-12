@@ -13,6 +13,7 @@ public class InstanceRunnerResource {
     private boolean running;
     private List<StepResource> steps;
     private TestCaseResource testCaseResource;
+    private String testSuiteInstanceRunnerId;
 
     public InstanceRunnerResource() {
     }
@@ -81,5 +82,13 @@ public class InstanceRunnerResource {
 
     public void setTestCaseResource(TestCaseResource testCaseResource) {
         this.testCaseResource = testCaseResource;
+    }
+
+    public String getTestSuiteInstanceRunnerId() {
+        return testSuiteInstanceRunnerId;
+    }
+
+    public void setTestSuiteInstanceRunnerId(String testSuiteInstanceRunnerId) {
+        this.testSuiteInstanceRunnerId = testSuiteInstanceRunnerId;
     }
 }
