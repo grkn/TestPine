@@ -32,6 +32,7 @@ public class TestCaseInstanceRunnerToInstanceRunnerResource implements
         instanceRunnerResource.setRunning(source.isRunning());
         instanceRunnerResource.setStartDate(source.getCreatedDate());
         instanceRunnerResource.setTestSuiteInstanceRunnerId(source.getTestSuiteInstanceRunnerId());
+        instanceRunnerResource.setTestSuiteInstanceRunnerName(source.getTestSuiteInstanceRunnerName());
 
         if (source.getUserEntity() != null) {
             instanceRunnerResource.setUserName(source.getUserEntity().getEmailAddress());

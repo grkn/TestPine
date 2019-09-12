@@ -14,6 +14,7 @@ public class InstanceRunnerResource {
     private List<StepResource> steps;
     private TestCaseResource testCaseResource;
     private String testSuiteInstanceRunnerId;
+    private String testSuiteInstanceRunnerName;
 
     public InstanceRunnerResource() {
     }
@@ -90,5 +91,13 @@ public class InstanceRunnerResource {
 
     public void setTestSuiteInstanceRunnerId(String testSuiteInstanceRunnerId) {
         this.testSuiteInstanceRunnerId = testSuiteInstanceRunnerId;
+    }
+
+    public String getTestSuiteInstanceRunnerName() {
+        return testSuiteInstanceRunnerName;
+    }
+
+    public void setTestSuiteInstanceRunnerName(String testSuiteInstanceRunnerName) {
+        this.testSuiteInstanceRunnerName = testSuiteInstanceRunnerName;
     }
 }

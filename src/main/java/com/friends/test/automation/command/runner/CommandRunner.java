@@ -22,12 +22,14 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class CommandRunner implements Runnable {
 
     private Logger logger = LoggerFactory.getLogger(CommandRunner.class);
@@ -66,6 +68,7 @@ public class CommandRunner implements Runnable {
         testCaseInstanceRunner.setRunning(true);
         testCaseInstanceRunner.setUserEntity(testCase.getUserEntity());
         testCaseInstanceRunner.setTestSuiteInstanceRunnerId(testSuiteInstanceRunner.getId());
+        testCaseInstanceRunner.setTestSuiteInstanceRunnerName(testSuiteInstanceRunner.getTestSuite().getName());
         testCaseInstanceRunner = this.testCaseInstanceRunnerRepository.saveAndFlush(testCaseInstanceRunner);
 
         SessionDto sessionDto = new SessionDto();
@@ -101,17 +104,20 @@ public class CommandRunner implements Runnable {
                         default:
                             return;
                     }
-                    if (defaultResource != null && defaultResource.getStatus() != 0) {
+                    if (defaultResource == null || defaultResource.getStatus() != 0) {
                         testStep.setStatus(defaultResource.getStatus());
                         testStep.setResult(objectMapper.writeValueAsString(defaultResource.getValue()));
+                        testStep.setExecutionTime(new Date(System.currentTimeMillis() - s));
+                        testStep.setRunStatus(false);
+                        testStep = testStepRepository.saveAndFlush(testStep);
+                        testCaseInstanceRunner = InstanceRunnerInsert(testCaseInstanceRunner, testStep);
                         break;
-                    } else {
-                        testStep.setStatus(0);
-                        testStep.setResult("{\"value\" : \"SUCCESS\"}");
                     }
+
+                    testStep.setStatus(0);
+                    testStep.setResult("{\"value\" : \"SUCCESS\"}");
                     testStep.setExecutionTime(new Date(System.currentTimeMillis() - s));
                     testStep.setRunStatus(false);
-
                     testStep = testStepRepository.saveAndFlush(testStep);
                     testCaseInstanceRunner = InstanceRunnerInsert(testCaseInstanceRunner, testStep);
                 }
@@ -122,9 +128,11 @@ public class CommandRunner implements Runnable {
             } finally {
                 driverService.deleteSession(sessionId, createDriverUrl());
                 testCaseInstanceRunner.setRunning(false);
+                testCaseInstanceRunnerRepository.saveAndFlush(testCaseInstanceRunner);
+
                 testSuiteInstanceRunner.setEndDate(new Date());
                 testSuiteInstanceRunnerRepository.save(testSuiteInstanceRunner);
-                testCaseInstanceRunnerRepository.saveAndFlush(testCaseInstanceRunner);
+
             }
         }
 
@@ -151,7 +159,7 @@ public class CommandRunner implements Runnable {
 
     private DefaultResource click(String sessionId, RunnableResource resource) {
         DefaultResource defaultResource = findElement(sessionId, resource);
-        if (defaultResource != null && defaultResource.getStatus() != 0) {
+        if (defaultResource != null && defaultResource.getStatus() == 0) {
             defaultResource = driverService
                     .clickElement(sessionId, defaultResource.getValue().get("ELEMENT").textValue(),
                             createDriverUrl()).
@@ -171,7 +179,7 @@ public class CommandRunner implements Runnable {
 
     private DefaultResource sendKeys(String sessionId, RunnableResource resource) {
         DefaultResource defaultResource = findElement(sessionId, resource);
-        if (defaultResource != null && defaultResource.getStatus() != 0) {
+        if (defaultResource != null && defaultResource.getStatus() == 0) {
             SendKeysDto sendKeysDto = new SendKeysDto();
             sendKeysDto.setValue(Lists.newArrayList(resource.getMessage()));
             defaultResource = driverService
