@@ -39,19 +39,17 @@ public class TestController {
 
     @PostMapping("/user/{userId}")
     public ResponseEntity<TestCaseResource> createTestCommands(@PathVariable String projectId,
-            @PathVariable String userId, @RequestBody
-            TestCaseDto testCaseDto) {
+            @PathVariable String userId, @RequestBody TestCaseDto testCaseDto) {
         TestCase testCase = this.testCaseService
                 .save(projectId, userId, conversionService.convert(testCaseDto, TestCase.class));
         TestCaseResource testCaseResource = conversionService.convert(testCase, TestCaseResource.class);
         return ResponseEntity.ok(testCaseResource);
     }
 
-    @GetMapping("/user/{userId}/all")
+    @GetMapping("/all")
     public ResponseEntity<Page<TestCaseResource>> findAllTestCommandsForUser(@PathVariable String projectId,
-            @PathVariable String userId,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<TestCase> testModelPage = this.testCaseService.findAllByUserId(projectId, userId, pageable);
+        Page<TestCase> testModelPage = this.testCaseService.findAllByProjectId(projectId, pageable);
         List<TestCaseResource> testCaseResourceSet = testModelPage.get()
                 .map(testModel -> conversionService.convert(testModel, TestCaseResource.class)).collect(
                         Collectors.toList());
@@ -75,7 +73,7 @@ public class TestController {
     @GetMapping("/{id}")
     public ResponseEntity<TestCaseResource> findTestByTestId(@PathVariable String projectId, @PathVariable String id) {
         return ResponseEntity
-                .ok(conversionService.convert(this.testCaseService.findById(projectId,id), TestCaseResource.class));
+                .ok(conversionService.convert(this.testCaseService.findById(projectId, id), TestCaseResource.class));
     }
 
 }

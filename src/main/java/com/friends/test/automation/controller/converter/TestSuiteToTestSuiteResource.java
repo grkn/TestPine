@@ -23,11 +23,11 @@ public class TestSuiteToTestSuiteResource implements Converter<TestSuite, TestSu
         TestSuiteResource testSuiteResource = new TestSuiteResource();
         testSuiteResource.setName(source.getName());
         testSuiteResource.setId(source.getId());
-
+        testSuiteResource.setCreatedDate(source.getCreatedDate());
         testSuiteResource
                 .setTestCases(source.getTestCases().stream().map(testCase -> converter.convert(testCase)).collect(
                         Collectors.toList()));
-
+        testSuiteResource.setUserName(source.getCreatedBy());
         return testSuiteResource;
     }
 }

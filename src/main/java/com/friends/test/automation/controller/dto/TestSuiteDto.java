@@ -4,17 +4,8 @@ import java.util.List;
 
 public class TestSuiteDto {
 
-    private String parentId;
     private String name;
     private List<TestCaseDto> testCase;
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
 
     public String getName() {
         return name;

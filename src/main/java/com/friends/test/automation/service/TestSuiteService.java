@@ -69,8 +69,6 @@ public class TestSuiteService extends BaseService {
     }
 
     public TestSuite createTestSuite(TestSuite testSuite, String projectId) {
-        TestSuite parent = checkIfParentExists(testSuite.getParent().getId());
-        testSuite.setParent(parent);
         Set<TestCase> testCaseSet = testSuite.getTestCases();
         testCaseSet.forEach(testCase -> {
             TestCase test = this.testCaseRepository.findById(testCase.getId()).orElseThrow(() -> new NotFoundException(
@@ -102,10 +100,6 @@ public class TestSuiteService extends BaseService {
                 ErrorResource.ErrorContent.builder().message("Suites can not be found").build("")));
     }
 
-    public TestSuite getRoot() {
-        return testSuiteRepository.findByParentIsNull();
-    }
-
     @Transactional
     public TestSuite addTestCaseToTestSuite(String suiteId, List<String> testIds, String projectId) {
         TestSuite testSuite = testSuiteRepository.findByIdAndTestProjectId(suiteId, projectId)
@@ -125,9 +119,9 @@ public class TestSuiteService extends BaseService {
         return testSuiteRepository.saveAndFlush(testSuite);
     }
 
-    public List<TestCase> getTestCasesBySuiteIdAndUserId(String suiteId, String userId, String projectId) {
+    public List<TestCase> getTestCasesBySuiteIdAndUserId(String suiteId, String projectId) {
         return testCaseRepository
-                .findAllByUserEntityIdAndTestSuiteIdAndTestProjectIdOrderByCreatedDateDesc(userId, suiteId, projectId);
+                .findAllByTestSuiteIdAndTestProjectIdOrderByCreatedDateDesc(suiteId, projectId);
     }
 
     @Transactional
@@ -178,7 +172,11 @@ public class TestSuiteService extends BaseService {
     }
 
     public Page<TestSuiteInstanceRunner> findTestSuiteInstanceRunners(String projectId, Pageable pageable) {
-        return testSuiteInstanceRunnerRepository.findAllByTestSuiteTestProjectId(projectId,pageable);
+        return testSuiteInstanceRunnerRepository.findAllByTestSuiteTestProjectId(projectId, pageable);
+    }
+
+    public Page<TestSuite> findAllBySuiteByProjectId(String projectId, Pageable pageable) {
+        return this.testSuiteRepository.findAllByTestProjectId(projectId, pageable);
     }
 }
 

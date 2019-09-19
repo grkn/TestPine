@@ -140,13 +140,6 @@ public class InitializeUser {
             }
         }
 
-        TestSuite testSuite = new TestSuite();
-        testSuite.setName("Root");
-        testSuite.setParent(null);
-        testSuite.setChildren(null);
-        testSuite.setUserEntity(null);
-        testSuite.setTestProject(null);
-        testSuiteRepository.save(testSuite);
     }
 }
 

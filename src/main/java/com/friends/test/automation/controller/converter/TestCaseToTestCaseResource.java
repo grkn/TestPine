@@ -27,6 +27,7 @@ public class TestCaseToTestCaseResource implements Converter<TestCase, TestCaseR
         testCaseResource.setCreatedDate(source.getCreatedDate());
         testCaseResource.setId(source.getId());
         testCaseResource.setName(source.getName());
+        testCaseResource.setCreatedBy(source.getCreatedBy());
         if (!CollectionUtils.isEmpty(source.getTestSuite())) {
             testCaseResource
                     .setTestSuiteNames(

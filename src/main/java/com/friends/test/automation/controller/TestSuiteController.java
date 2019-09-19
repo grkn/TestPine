@@ -1,12 +1,15 @@
 package com.friends.test.automation.controller;
 
-import com.friends.test.automation.controller.converter.CustomTestSuiteToTestSuiteResouceConverter;
 import com.friends.test.automation.controller.dto.TestSuiteDto;
 import com.friends.test.automation.controller.resource.TestCaseResource;
 import com.friends.test.automation.controller.resource.TestSuiteResource;
 import com.friends.test.automation.entity.TestSuite;
 import com.friends.test.automation.service.TestSuiteService;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,13 +30,11 @@ public class TestSuiteController {
 
     private final ConversionService conversionService;
     private final TestSuiteService testSuiteService;
-    private final CustomTestSuiteToTestSuiteResouceConverter customTestSuiteToTestSuiteResouceConverter;
 
     public TestSuiteController(ConversionService conversionService,
             TestSuiteService testSuiteService) {
         this.conversionService = conversionService;
         this.testSuiteService = testSuiteService;
-        customTestSuiteToTestSuiteResouceConverter = new CustomTestSuiteToTestSuiteResouceConverter();
     }
 
     @PostMapping("/project/{projectId}")
@@ -70,11 +71,17 @@ public class TestSuiteController {
         return ResponseEntity.ok(resource);
     }
 
-    @GetMapping("/project/{projectId}/root")
-    public ResponseEntity<TestSuiteResource> root(@PathVariable String projectId) {
-        TestSuiteResource resource = customTestSuiteToTestSuiteResouceConverter
-                .convert(testSuiteService.getRoot(), projectId);
-        return ResponseEntity.ok(resource);
+    @GetMapping("/project/{projectId}/all")
+    public ResponseEntity<Page<TestSuiteResource>> root(@PathVariable String projectId,
+            @PageableDefault(sort = "createdBy")
+                    Pageable pageable) {
+
+        Page<TestSuite> testSuitePageable = testSuiteService.findAllBySuiteByProjectId(projectId, pageable);
+
+        List<TestSuiteResource> testSuiteResources = testSuitePageable.get()
+                .map(testSuite -> conversionService.convert(testSuite, TestSuiteResource.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new PageImpl<>(testSuiteResources, pageable, testSuitePageable.getTotalElements()));
     }
 
     @PostMapping("/project/{projectId}/{suiteId}/addtest")
@@ -86,11 +93,10 @@ public class TestSuiteController {
         return ResponseEntity.ok(resource);
     }
 
-    @GetMapping("/project/{projectId}/{suiteId}/testcases/user/{userId}")
+    @GetMapping("/project/{projectId}/{suiteId}/testcases")
     public ResponseEntity<List<TestCaseResource>> getTestCaseBySuiteId(@PathVariable String projectId,
-            @PathVariable String suiteId,
-            @PathVariable String userId) {
-        List<TestCaseResource> testCases = testSuiteService.getTestCasesBySuiteIdAndUserId(suiteId, userId, projectId)
+            @PathVariable String suiteId) {
+        List<TestCaseResource> testCases = testSuiteService.getTestCasesBySuiteIdAndUserId(suiteId, projectId)
                 .stream()
                 .map(testCase -> conversionService.convert(testCase, TestCaseResource.class))
                 .collect(Collectors.toList());
@@ -107,7 +113,7 @@ public class TestSuiteController {
     @PatchMapping("/project/{projectId}/suite/{suiteId}/testcase/run/driver/{driverId}")
     public ResponseEntity<Void> runTestCases(@PathVariable String projectId, @PathVariable String suiteId
             , @PathVariable String driverId) {
-        testSuiteService.runTestCase(suiteId, projectId,driverId);
+        testSuiteService.runTestCase(suiteId, projectId, driverId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -68,8 +68,8 @@ public class TestCaseService {
         });
     }
 
-    public Page<TestCase> findAllByUserId(String projectId, String userId, Pageable pageable) {
-        return this.testCaseRepository.findAllByUserEntityIdAndTestProjectId(userId, projectId, pageable);
+    public Page<TestCase> findAllByProjectId(String projectId, Pageable pageable) {
+        return this.testCaseRepository.findAllByTestProjectId(projectId, pageable);
     }
 
     public Page<TestCaseInstanceRunner> findAllInstanceRunnersByTestCaseId(String projectId, String testCaseId,

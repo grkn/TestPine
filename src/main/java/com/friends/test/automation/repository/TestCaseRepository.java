@@ -9,12 +9,11 @@ import java.util.Optional;
 
 public interface TestCaseRepository extends BaseTanistanJpaRepository<TestCase> {
 
-    Page<TestCase> findAllByUserEntityIdAndTestProjectId(String userId, String projectId, Pageable pageable);
+    Page<TestCase> findAllByTestProjectId(String projectId, Pageable pageable);
 
     Optional<Boolean> existsByName(String name);
 
-    List<TestCase> findAllByUserEntityIdAndTestSuiteIdAndTestProjectIdOrderByCreatedDateDesc(String userId,
-            String suiteId, String projectId);
+    List<TestCase> findAllByTestSuiteIdAndTestProjectIdOrderByCreatedDateDesc(String suiteId, String projectId);
 
     Optional<TestCase> findByIdAndTestProjectId(String id, String projectId);
 

@@ -25,10 +25,6 @@ public class TestSuiteDtoToTestSuite implements Converter<TestSuiteDto, TestSuit
 
         testSuite.setName(source.getName());
 
-        TestSuite parent = new TestSuite();
-        parent.setId(source.getParentId());
-        testSuite.setParent(parent);
-
         if (!CollectionUtils.isEmpty(source.getTestCase())) {
             Set<TestCase> set = source.getTestCase().stream()
                     .map(testCaseDto -> testCaseDtoToTestCaseConverter.convert(testCaseDto)).collect(

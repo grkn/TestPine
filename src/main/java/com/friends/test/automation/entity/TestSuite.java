@@ -23,11 +23,11 @@ public class TestSuite extends TanistanBaseEntity<String> {
     @Column(name = "test_suite_id")
     private Set<TestCase> testCases;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private TestSuite parent;
-
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<TestSuite> children;
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private TestSuite parent;
+//
+//    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+//    private List<TestSuite> children;
 
     @OneToOne(mappedBy = "testSuite", fetch = FetchType.EAGER)
     private UserEntity userEntity;
@@ -57,22 +57,22 @@ public class TestSuite extends TanistanBaseEntity<String> {
     public void setName(String name) {
         this.name = name;
     }
-
-    public TestSuite getParent() {
-        return parent;
-    }
-
-    public void setParent(TestSuite parent) {
-        this.parent = parent;
-    }
-
-    public List<TestSuite> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<TestSuite> children) {
-        this.children = children;
-    }
+//
+//    public TestSuite getParent() {
+//        return parent;
+//    }
+//
+//    public void setParent(TestSuite parent) {
+//        this.parent = parent;
+//    }
+//
+//    public List<TestSuite> getChildren() {
+//        return children;
+//    }
+//
+//    public void setChildren(List<TestSuite> children) {
+//        this.children = children;
+//    }
 
     public UserEntity getUserEntity() {
         return userEntity;

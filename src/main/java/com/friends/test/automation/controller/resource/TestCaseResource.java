@@ -17,6 +17,7 @@ public class TestCaseResource {
     private List<String> testSuiteIds;
     private DriverResource driver;
     private List<InstanceRunnerResource> instanceRunnerResources;
+    private String createdBy;
 
     public TestCaseResource() {
     }
@@ -92,5 +93,13 @@ public class TestCaseResource {
 
     public void setTestSuiteIds(List<String> testSuiteIds) {
         this.testSuiteIds = testSuiteIds;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }
