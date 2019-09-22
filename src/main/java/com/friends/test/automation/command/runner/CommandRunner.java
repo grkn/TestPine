@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -71,8 +72,8 @@ public class CommandRunner implements Runnable {
         testCaseInstanceRunner.setTestSuiteInstanceRunnerName(testSuiteInstanceRunner.getTestSuite().getName());
         testCaseInstanceRunner = this.testCaseInstanceRunnerRepository.saveAndFlush(testCaseInstanceRunner);
 
-        SessionDto sessionDto = new SessionDto();
-        sessionDto.setDesiredCapabilities(new SessionDto.DesiredCapabilities());
+        SessionDto sessionDto = sessionDtoPrepare();
+
         ResponseEntity<SessionResource> sessionResource = driverService
                 .getSession(sessionDto, createDriverUrl());
         if (sessionResource.getBody() != null) {
@@ -136,6 +137,15 @@ public class CommandRunner implements Runnable {
             }
         }
 
+    }
+
+    private SessionDto sessionDtoPrepare() {
+        SessionDto sessionDto = new SessionDto();
+        SessionDto.DesiredCapabilities desiredCapabilities = new SessionDto.DesiredCapabilities();
+        desiredCapabilities.setBrowserName("chrome");
+
+        sessionDto.setDesiredCapabilities(desiredCapabilities);
+        return sessionDto;
     }
 
     private TestCaseInstanceRunner InstanceRunnerInsert(TestCaseInstanceRunner testCaseInstanceRunner,

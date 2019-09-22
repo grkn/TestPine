@@ -20,9 +20,10 @@ public class SessionDto implements Serializable {
     public static class DesiredCapabilities {
 
         private String browserName;
-        @JsonProperty("goog:chromeOptions")
-        private ChromeOptions chromeOptions;
-        private Capabilities capabilities;
+//        @JsonProperty("goog:chromeOptions")
+//        private ChromeOptions chromeOptions ;
+
+        // private Capabilities capabilities;
 
         public String getBrowserName() {
             return browserName;
@@ -32,34 +33,34 @@ public class SessionDto implements Serializable {
             this.browserName = browserName;
         }
 
-        public ChromeOptions getChromeOptions() {
-            return chromeOptions;
-        }
+//        public ChromeOptions getChromeOptions() {
+//            return chromeOptions;
+//        }
+//
+//        public void setChromeOptions(ChromeOptions chromeOptions) {
+//            this.chromeOptions = chromeOptions;
+//        }
 
-        public void setChromeOptions(ChromeOptions chromeOptions) {
-            this.chromeOptions = chromeOptions;
-        }
-
-        public Capabilities getCapabilities() {
+        /*public Capabilities getCapabilities() {
             return capabilities;
         }
 
         public void setCapabilities(Capabilities capabilities) {
             this.capabilities = capabilities;
-        }
+        }*/
     }
 
     public static class ChromeOptions {
 
-        private String opt;
-
-        public String getOpt() {
-            return opt;
-        }
-
-        public void setOpt(String opt) {
-            this.opt = opt;
-        }
+//        private String opt;
+//
+//        public String getOpt() {
+//            return opt;
+//        }
+//
+//        public void setOpt(String opt) {
+//            this.opt = opt;
+//        }
     }
 
     public static class Capabilities {
